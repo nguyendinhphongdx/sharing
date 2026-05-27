@@ -1,0 +1,26 @@
+{
+  "name": "slidev-theme-sharing",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Theme sáng (accent teal) dùng chung cho các buổi chia sẻ kiến thức.",
+  "keywords": [
+    "slidev-theme",
+    "slidev"
+  ],
+  "engines": {
+    "slidev": ">=0.48.0"
+  },
+  "slidev": {
+    "colorSchema": "light",
+    "highlighter": "shiki",
+    "defaults": {
+      "transition": "fade-out",
+      "aspectRatio": "16/9",
+      "fonts": {
+        "sans": "Inter",
+        "serif": "Inter",
+        "mono": "Fira Code"
+      }
+    }
+  }
+}

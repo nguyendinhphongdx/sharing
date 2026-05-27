@@ -1,0 +1,44 @@
+{
+  "generatedAt": "2026-05-27T16:21:05.258Z",
+  "source": "web",
+  "engine": "bing",
+  "note": "Ảnh tìm từ web (Bing Images), bản quyền hỗn hợp — dùng nội bộ. Đã lọc bỏ ảnh dính watermark. Kiểm tra license tại nguồn nếu trình bày công khai.",
+  "images": [
+    {
+      "file": "images/01-abstract-futuristic-digital-and-technolo.jpg",
+      "ref": "/images/01-abstract-futuristic-digital-and-technolo.jpg",
+      "title": "Abstract futuristic digital and technology background (AI)",
+      "descriptionUrl": "https://www.vecteezy.com/vector-art/9482271-abstract-futuristic-digital-and-technology-on-dark-blue-color-background-ai-artificial-intelligence-wording-with-the-circuit-design",
+      "license": "web — cần kiểm tra bản quyền nếu công khai",
+      "provider": "Vecteezy (via Bing Images)",
+      "usedFor": "background: section AI→LLM→Agent"
+    },
+    {
+      "file": "images/02-ai-generated-abstract-minimalistic-dark-.jpg",
+      "ref": "/images/02-ai-generated-abstract-minimalistic-dark-.jpg",
+      "title": "Abstract minimalistic dark blue & neon tech background",
+      "descriptionUrl": "https://www.vecteezy.com/photo/43170815-ai-generated-abstract-minimalistic-dark-blue-and-neon-tech-background",
+      "license": "web — cần kiểm tra bản quyền nếu công khai",
+      "provider": "Vecteezy (via Bing Images)",
+      "usedFor": "background: cover"
+    },
+    {
+      "file": "images/05-what-is-model-context-protocol-mcp-a-gui.png",
+      "ref": "/images/05-what-is-model-context-protocol-mcp-a-gui.png",
+      "title": "Model Context Protocol — sơ đồ Host / Client / Transport / Servers",
+      "descriptionUrl": "https://devdashlabs.com/insights/model-context-protocol",
+      "license": "web — cần kiểm tra bản quyền nếu công khai",
+      "provider": "DevDash Labs (via Bing Images)",
+      "usedFor": "image-right: slide kiến trúc MCP"
+    },
+    {
+      "file": "images/08-rise-of-the-planet-of-the-agents-creatin.png",
+      "ref": "/images/08-rise-of-the-planet-of-the-agents-creatin.png",
+      "title": "Thành phần của một AI Agent (LLM, Action, Memory, Reasoning, Persona)",
+      "descriptionUrl": "https://blog.openthreatresearch.com/rise-of-the-planet-of-the-agents/",
+      "license": "web — cần kiểm tra bản quyền nếu công khai",
+      "provider": "Open Threat Research (via Bing Images)",
+      "usedFor": "image-right: slide thành phần agent"
+    }
+  ]
+}

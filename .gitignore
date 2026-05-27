@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Slidev build output
+dist/
+.slidev/
+**/.slidev/
+
+# Exports
+*.pdf
+*.pptx
+!docs/**/*.pdf
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
+
+# Env
+.env
+.env.local
+
+# Keep downloaded topic images out of nothing — they ARE committed on purpose.
+# (public/images/ is intentionally NOT ignored so slides are reproducible.)
+
+# Preview/export tạm
+**/_preview/

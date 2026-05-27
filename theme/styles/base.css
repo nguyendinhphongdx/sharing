@@ -1,0 +1,122 @@
+/* ============================================================
+   slidev-theme-sharing — base (light)
+   Accent: teal. Toàn bộ selector scope dưới .slidev-layout
+   để không rò rỉ sang presenter UI.
+   ============================================================ */
+
+:root {
+  --sharing-accent: #0d9488;       /* teal-600 */
+  --sharing-accent-soft: #14b8a6;  /* teal-500 */
+  --sharing-accent-2: #0ea5e9;     /* sky-500  */
+  --sharing-fg: #0f172a;           /* slate-900 */
+  --sharing-fg-soft: #334155;      /* slate-700 */
+  --sharing-muted: #64748b;        /* slate-500 */
+  --sharing-bg: #ffffff;
+  --sharing-bg-soft: #f6f9fb;      /* near slate-50, hơi xanh */
+  --sharing-border: #e2e8f0;       /* slate-200 */
+
+  /* Slidev dùng biến này cho accent ở một số built-in */
+  --slidev-theme-primary: #0d9488;
+}
+
+/* Ép nền sáng cho toàn bộ slide */
+.slidev-layout {
+  background-color: var(--sharing-bg);
+  color: var(--sharing-fg);
+  padding: 2.6rem 3.2rem;
+  line-height: 1.55;
+}
+
+/* ---- Headings ---- */
+.slidev-layout h1 {
+  color: var(--sharing-fg);
+  font-weight: 800;
+  font-size: 2.3rem;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.6rem;
+}
+.slidev-layout h2 {
+  color: var(--sharing-fg);
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: -0.01em;
+}
+.slidev-layout h3 {
+  color: var(--sharing-fg-soft);
+  font-weight: 700;
+}
+
+/* Gạch nhấn teal dưới h1 của slide nội dung (layout default) */
+.slidev-layout.default h1::after,
+.slidev-layout.two-cols h1::after,
+.slidev-layout.two-cols-header h1::after {
+  content: "";
+  display: block;
+  width: 3.2rem;
+  height: 4px;
+  border-radius: 4px;
+  margin-top: 0.55rem;
+  background: linear-gradient(90deg, var(--sharing-accent), var(--sharing-accent-2));
+}
+
+/* ---- Body text ---- */
+.slidev-layout p,
+.slidev-layout li {
+  color: var(--sharing-fg-soft);
+}
+.slidev-layout strong { color: var(--sharing-accent); font-weight: 700; }
+.slidev-layout em { color: var(--sharing-fg); font-style: italic; }
+.slidev-layout a {
+  color: var(--sharing-accent);
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--sharing-accent) 35%, transparent);
+}
+
+/* ---- Lists: marker teal ---- */
+.slidev-layout ul > li::marker { color: var(--sharing-accent); }
+.slidev-layout ol > li::marker { color: var(--sharing-accent); font-weight: 700; }
+.slidev-layout li { margin: 0.22rem 0; }
+
+/* ---- Blockquote ---- */
+.slidev-layout blockquote {
+  border-left: 4px solid var(--sharing-accent);
+  background: var(--sharing-bg-soft);
+  color: var(--sharing-fg-soft);
+  padding: 0.6rem 1rem;
+  border-radius: 0 8px 8px 0;
+}
+
+/* ---- Inline code ---- */
+.slidev-layout :not(pre) > code {
+  background: color-mix(in srgb, var(--sharing-accent) 12%, white);
+  color: #0f766e; /* teal-700 */
+  padding: 0.12em 0.4em;
+  border-radius: 5px;
+  font-size: 0.88em;
+}
+
+/* ---- Code block ---- */
+.slidev-layout pre {
+  border: 1px solid var(--sharing-border);
+  border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+/* ---- Tables ---- */
+.slidev-layout table { border-collapse: collapse; }
+.slidev-layout th {
+  background: var(--sharing-bg-soft);
+  color: var(--sharing-fg);
+  border-bottom: 2px solid var(--sharing-accent);
+  text-align: left;
+}
+.slidev-layout td, .slidev-layout th {
+  border: 1px solid var(--sharing-border);
+  padding: 0.4rem 0.7rem;
+}
+
+/* Trang số nhỏ góc phải */
+.slidev-page {
+  color: var(--sharing-muted);
+}

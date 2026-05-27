@@ -1,0 +1,29 @@
+{
+  "name": "sharing-slides-harness",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Harness để AI Coding tạo slide Slidev cho các buổi chia sẻ kiến thức. Mỗi topic là một folder riêng, dùng chung local theme sáng (teal).",
+  "engines": {
+    "node": ">=18"
+  },
+  "workspaces": [
+    "theme"
+  ],
+  "scripts": {
+    "new": "node scripts/new-topic.mjs",
+    "images": "node scripts/fetch-images.mjs",
+    "dev": "node scripts/present.mjs",
+    "build": "node scripts/present.mjs --build",
+    "export": "node scripts/present.mjs --export",
+    "list": "node scripts/present.mjs --list"
+  },
+  "dependencies": {
+    "@slidev/cli": "^52.15.2",
+    "vue": "^3.5.35"
+  },
+  "devDependencies": {
+    "@slidev/types": "^52.15.2",
+    "playwright-chromium": "^1.60.0"
+  }
+}

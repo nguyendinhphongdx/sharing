@@ -1,0 +1,32 @@
+/* ============================================================
+   slidev-theme-sharing — tinh chỉnh các built-in layout
+   (các layout tuỳ biến cover/section/quote/end style trong .vue)
+   ============================================================ */
+
+/* center: tiêu đề lớn, có gạch nhấn */
+.slidev-layout.center h1 {
+  font-size: 2.6rem;
+}
+
+/* section built-in (nếu dùng) — ta có section.vue riêng, đây là fallback */
+.slidev-layout.statement h1,
+.slidev-layout.fact h1 {
+  color: var(--sharing-accent);
+}
+
+/* intro built-in */
+.slidev-layout.intro h1 {
+  font-size: 2.8rem;
+}
+
+/* two-cols: thêm khoảng cách cột */
+.slidev-layout.two-cols .col-left,
+.slidev-layout.two-cols .col-right {
+  padding-right: 1rem;
+}
+
+/* image-left / image-right: bo góc nhẹ phần ảnh */
+.slidev-layout.image-left .slidev-layout-image,
+.slidev-layout.image-right .slidev-layout-image {
+  filter: saturate(1.02);
+}
