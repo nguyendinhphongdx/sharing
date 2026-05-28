@@ -1,0 +1,17 @@
+{
+  "name": "todo-mcp-demo",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Demo cho topic ai-llm-agent-mcp: Todo app (web UI + REST) + MCP server cho agent (n8n) thao tac.",
+  "scripts": {
+    "start": "node server.mjs",
+    "check": "node check.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "zod": "^3.24.0"
+  }
+}
