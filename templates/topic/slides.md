@@ -1,8 +1,10 @@
 ---
-theme: slidev-theme-sharing
+theme: ../../theme
 title: {{TITLE}}
 info: |
   {{TITLE}} — buổi chia sẻ kiến thức.
+layout: cover
+# background: /images/01-xxx.jpg   # bỏ comment khi đã có ảnh trong public/images
 class: text-left
 mdc: true
 drawings:

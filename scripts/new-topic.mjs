@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Tạo một topic mới từ templates/topic.
 //   node scripts/new-topic.mjs <slug> [--title "..."] [--author "..."]
-import { existsSync, cpSync, readFileSync, writeFileSync, readdirSync, statSync } from 'node:fs'
+import { existsSync, cpSync, mkdirSync, readFileSync, writeFileSync, readdirSync, statSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join, resolve } from 'node:path'
 
@@ -61,9 +61,17 @@ function walk(dir) {
 }
 walk(dest)
 
+// Tạo sẵn thư mục research/ để topic-researcher ghi notes từng vòng vào đó.
+mkdirSync(join(dest, 'research'), { recursive: true })
+
 console.log(`✓ Đã tạo topics/${slug}`)
-console.log(`  - topics/${slug}/brief.md   (research + outline để duyệt)`)
-console.log(`  - topics/${slug}/slides.md  (slide, dùng theme: ../../theme)`)
-console.log(`\nTiếp theo:`)
-console.log(`  node scripts/fetch-images.mjs ${slug} --query "<chủ đề>"`)
-console.log(`  npm run dev -- ${slug}`)
+console.log(`  - topics/${slug}/brief.md        (tiến hoá Stage A → B → C — xem file)`)
+console.log(`  - topics/${slug}/research/       (notes thô do topic-researcher ghi)`)
+console.log(`  - topics/${slug}/slides.md       (dùng theme: ../../theme)`)
+console.log(`\nTiếp theo (skill /make-slides sẽ điều phối):`)
+console.log(`  1. Research broad → research/round-1-broad.md`)
+console.log(`  2. Stage A brief — chọn outline`)
+console.log(`  3. Stage B brief — duyệt key points (lặp research nếu cần)`)
+console.log(`  4. Stage C brief — chi tiết per-slide → cổng duyệt cuối`)
+console.log(`  5. node scripts/fetch-images.mjs ${slug} --query "..."`)
+console.log(`  6. slide-builder → npm run dev -- ${slug}`)

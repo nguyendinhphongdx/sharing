@@ -1,49 +1,25 @@
-# Brief: {{TITLE}}
+# Brief: {{TITLE}}  ·  Stage —
 
-> File này là **outline để bạn duyệt** trước khi dựng slide.
-> Sửa trực tiếp ở đây; khi bạn OK, AI mới sinh `slides.md`.
+> File này **tiến hoá qua 3 stage**, mỗi stage là một cổng duyệt:
+>
+> - **Stage A** sau research vòng 1 → 2-3 outline đề xuất, bạn chọn 1.
+> - **Stage B** sau khi chọn outline → key points theo từng phần; lặp research thêm nếu cần; bạn nói "OK" để sang C.
+> - **Stage C** trước khi dựng slide → brief chi tiết per-slide; cổng duyệt cuối.
+>
+> Skill `/make-slides` sẽ ghi đè file này khi tiến stage. Bạn sửa trực tiếp ở đây hoặc nói AI sửa.
 
 - **Slug:** `{{SLUG}}`
 - **Ngày:** {{DATE}}
 - **Khán giả:** <!-- vd: dev backend, mức trung cấp -->
 - **Thời lượng:** <!-- vd: 30 phút + 10 phút hỏi đáp -->
-- **Mục tiêu (sau buổi này người nghe sẽ...):**
-  - <!-- 1 -->
-  - <!-- 2 -->
-- **Thông điệp cốt lõi (1 câu):**
+- **Góc nhìn / thông điệp cốt lõi (1 câu):**
   <!-- ... -->
 
-## Góc nhìn / câu chuyện dẫn dắt
+<!-- Phần dưới đây sẽ được skill `/make-slides` viết theo stage hiện tại.
+     Đừng xoá block frontmatter phía trên — skill cần nó để tham chiếu. -->
 
-<!-- Vì sao chủ đề này đáng nghe? Mạch kể xuyên suốt là gì? -->
+## (Stage A sẽ điền vào đây: tóm tắt research + 2-3 outline đề xuất + khuyến nghị)
 
-## Outline (mỗi mục ~ 1–3 slide)
+## (Stage B sẽ điền vào đây: outline đã chọn + key points theo từng phần)
 
-1. **Mở đầu / bối cảnh** — ...
-2. **Phần 1: ...** — ...
-3. **Phần 2: ...** — ...
-4. **Tổng kết & hành động tiếp theo** — ...
-
-## Điểm chính cần nhấn (talking points)
-
-- ...
-
-## Thuật ngữ (giữ tiếng Anh, kèm giải thích ngắn)
-
-| Term | Giải thích |
-|------|-----------|
-| ... | ... |
-
-## Gợi ý ảnh nền (cho cover + section)
-
-<!-- Truy vấn ảnh trên Wikimedia Commons, dùng cho scripts/fetch-images.mjs -->
-
-- query: `...`
-- query: `...`
-
-## Nguồn tham khảo
-
-<!-- Điền khi research; mỗi nguồn: tiêu đề — URL — vì sao đáng tin -->
-
-1. ...
-2. ...
+## (Stage C sẽ điền vào đây: brief chi tiết per-slide + truy vấn ảnh + nguồn)

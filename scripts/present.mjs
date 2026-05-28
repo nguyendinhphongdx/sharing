@@ -15,7 +15,24 @@ const topicsDir = join(root, 'topics')
 
 const args = process.argv.slice(2)
 const flags = new Set(args.filter((a) => a.startsWith('--')))
-const slug = args.find((a) => !a.startsWith('--'))
+
+// Cờ điều khiển của riêng script này (không truyền xuống Slidev, không nhận giá trị).
+const CONTROL = new Set(['--build', '--export', '--list', '--open'])
+
+// Slug = arg không-phải-cờ đầu tiên, NHƯNG bỏ qua token là giá trị của một cờ
+// passthrough phía trước (vd `3040` trong `--port 3040`). Cách này nhận đúng slug
+// dù nó đứng trước hay sau cờ điều khiển (npm script chạy `--build <slug>`).
+let slug
+let slugIndex = -1
+for (let i = 0; i < args.length; i++) {
+  const a = args[i]
+  if (a.startsWith('--')) continue
+  const prev = args[i - 1]
+  if (prev && prev.startsWith('--') && !CONTROL.has(prev)) continue // giá trị của cờ passthrough
+  slug = a
+  slugIndex = i
+  break
+}
 
 function listTopics() {
   if (!existsSync(topicsDir)) return []
@@ -44,10 +61,9 @@ if (flags.has('--build')) sub = ['build', entry]
 else if (flags.has('--export')) sub = ['export', entry]
 else sub = [entry, ...(flags.has('--open') ? ['--open'] : [])]
 
-// Cho phép truyền thêm cờ lạ (vd --port 3040) xuống Slidev
-const passthrough = args.filter(
-  (a) => a.startsWith('--') && !['--build', '--export', '--open', '--list'].includes(a),
-)
+// Truyền nguyên vẹn mọi arg còn lại xuống Slidev — GIỮ cả giá trị đứng sau cờ
+// (vd `--port 3040`). Bỏ slug và các cờ điều khiển của riêng script này.
+const passthrough = args.filter((a, i) => i !== slugIndex && !CONTROL.has(a))
 
 const cmd = ['slidev', ...sub, ...passthrough]
 console.log(`> npx ${cmd.join(' ')}  (cwd: ${root})`)

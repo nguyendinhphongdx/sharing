@@ -4,15 +4,25 @@ Khung (harness) giúp AI Coding tạo **slide trình bày chia sẻ kiến thứ
 
 ## Triết lý
 
-Mỗi buổi chia sẻ đi qua một quy trình cố định:
+Mỗi buổi chia sẻ đi qua quy trình **iterative, 3 cổng duyệt** — không để AI tự
+"chốt" thay bạn:
 
-1. **Brainstorm & làm rõ** — chốt khán giả, thời lượng, độ sâu, góc nhìn.
-2. **Research** — tìm bài viết/tài liệu uy tín về chủ đề (agent `topic-researcher`).
-3. **Tổng kết thành `brief.md`** — outline có cấu trúc + nguồn + gợi ý ảnh.
-4. **Bạn duyệt** — chỉnh sửa tới khi đồng ý. *Đây là cổng bắt buộc trước khi dựng slide.*
-5. **Tải ảnh** — ảnh chủ đề tìm từ web (Playwright/Bing, không cần key) hoặc Creative Commons (`--source cc`); có gradient dự phòng.
-6. **Dựng slide** — `slides.md` dùng theme sáng, ảnh nền ở vài slide đầu, nhiều layout.
-7. **Kiểm tra build** + export PDF nếu cần.
+1. **Brainstorm** — chốt khán giả, thời lượng, góc nhìn, thông điệp cốt lõi.
+2. **Research vòng 1 (broad)** — agent `topic-researcher` quét rộng, lưu notes
+   thô vào `topics/<slug>/research/round-1-broad.md`.
+3. **Stage A · cổng 1: chọn outline** — AI đề xuất 2-3 outline (theo các pattern
+   khác nhau: Evolution, Problem→Solution, Anatomy, Compare, Pattern catalog,
+   Case study…). Bạn chọn 1 hoặc "mix A+B".
+4. **Stage B · cổng 2: duyệt key points** — AI viết 10-20 key points theo outline.
+   Bạn nói "OK" hoặc "research thêm về X" → loop research (focused) + cập nhật key
+   points → tới khi bạn OK rõ ràng.
+5. **Stage C · cổng 3: brief chi tiết per-slide** — AI viết nội dung từng slide
+   (title, bullets thật, layout, image hint, presenter note). Cổng cuối.
+6. **Tải ảnh** — `fetch-images.mjs` theo truy vấn trong Stage C (web/Bing mặc
+   định, không cần key).
+7. **Dựng slide** — agent `slide-builder` chỉ format + chọn layout + gắn ảnh,
+   không sáng tác thêm.
+8. **Build + verify** + export PDF nếu cần.
 
 Ngôn ngữ nội dung: **song ngữ** (thuật ngữ kỹ thuật tiếng Anh, diễn giải tiếng Việt).
 
@@ -47,16 +57,16 @@ trước khi dựng slide.
 | `templates/topic/` | Skeleton sao chép cho mỗi topic mới |
 | `topics/<slug>/` | Một chủ đề: `brief.md`, `slides.md`, `public/images/` |
 | `scripts/` | `new-topic`, `fetch-images`, `present` |
-| `.claude/agents/` | `topic-researcher`, `slide-builder` |
-| `.claude/skills/make-slides/` | Quy trình điều phối |
+| `.claude/agents/` | `topic-researcher`, `slide-builder`, `topic-remaker` (làm lại topic có sẵn) |
+| `.claude/skills/make-slides/` | Quy trình tạo topic mới (điều phối) |
+| `.claude/skills/remake-slides/` | Quy trình làm lại topic có sẵn (gọi `topic-remaker`) |
 | `CLAUDE.md` | Hướng dẫn chi tiết cho AI làm việc trong repo |
 
-## Bản quyền ảnh
+## Nguồn ảnh
 
 Mặc định ảnh tìm từ **web** (Bing Images qua Playwright) — liên quan cao, không cần
-API key, **nhưng bản quyền hỗn hợp** → phù hợp dùng **nội bộ**. Script tự lọc bỏ ảnh
-dính watermark. Muốn **an toàn bản quyền** để trình bày công khai, dùng
-`--source cc` (Openverse + Wikimedia Commons, đa số CC-BY / public domain).
+API key. Script tự lọc bỏ ảnh dính watermark. Các deck ở đây **dùng nội bộ** nên
+không bận tâm bản quyền; nếu cần ảnh Creative Commons thì thêm `--source cc`
+(Openverse + Wikimedia Commons).
 
-Mọi ảnh đều ghi nguồn/license trong `topics/<slug>/public/images/credits.json` —
-hãy ghi nguồn theo file đó khi trình bày.
+Nguồn mỗi ảnh được ghi trong `topics/<slug>/public/images/credits.json`.

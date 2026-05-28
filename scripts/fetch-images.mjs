@@ -148,14 +148,17 @@ async function download(url, dest, tries = 4) {
   if (searcher) {
     try { const buf = await searcher.fetchBytes(url); writeFileSync(dest, buf); return buf.length } catch {}
   }
+  let lastStatus = 0
   for (let attempt = 1; attempt <= tries; attempt++) {
     const res = await fetch(url, { headers: { 'User-Agent': UA } })
     if (res.ok) { const buf = Buffer.from(await res.arrayBuffer()); writeFileSync(dest, buf); return buf.length }
+    lastStatus = res.status
     if ((res.status === 429 || res.status === 503) && attempt < tries) {
       await sleep(1200 * attempt); continue
     }
     throw new Error(`HTTP ${res.status}`)
   }
+  throw new Error(`HTTP ${lastStatus} sau ${tries} lần thử`) // cạn retry (429/503)
 }
 
 const credits = []
@@ -179,7 +182,7 @@ for (const query of queries) {
       credits.push({
         file: `images/${file}`, ref: `/images/${file}`,
         title: stripTags(r.title), descriptionUrl: r.descriptionUrl,
-        license: r.license || 'web — cần kiểm tra bản quyền nếu công khai',
+        license: r.license || 'web (dùng nội bộ)',
         artist: r.artist || '—', provider: r.provider, query, width: r.width, height: r.height,
       })
       taken++

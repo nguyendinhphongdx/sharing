@@ -1,8 +1,9 @@
 ---
-theme: slidev-theme-sharing
+theme: ../../theme
 title: Hành trình AI → LLM → Agent và lời giải MCP
 info: |
   Buổi chia sẻ kiến thức: từ AI biết "nói" đến AI biết "làm", và vì sao MCP ra đời.
+layout: cover
 background: /images/02-ai-generated-abstract-minimalistic-dark-.jpg
 class: text-left
 mdc: true

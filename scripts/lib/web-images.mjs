@@ -1,7 +1,7 @@
 // Tìm ảnh trên web bằng trình duyệt thật (Playwright) — KHÔNG cần API key.
-// Google Images là engine chính, Bing Images làm fallback.
-// LƯU Ý BẢN QUYỀN: ảnh trả về là bản quyền hỗn hợp/không rõ — hợp dùng nội bộ;
-// kiểm tra license trước khi đăng công khai. Nguồn được ghi trong credits.json.
+// Bing Images là engine mặc định (ổn định khi scrape); Google là tuỳ chọn
+// (--engine google) và sẽ tự fallback sang Bing nếu rỗng. Nguồn ghi trong
+// credits.json. Deck dùng nội bộ nên không bận tâm bản quyền.
 import { chromium } from 'playwright-chromium'
 
 const DESKTOP_UA =

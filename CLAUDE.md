@@ -6,23 +6,54 @@ chung **local theme sáng** ở `theme/` (accent teal).
 
 ## Quy trình BẮT BUỘC (skill `/make-slides`)
 
-Khi người dùng yêu cầu tạo slide cho một chủ đề, đi theo đúng các bước:
+Quy trình **iterative, 3 cổng duyệt**. Chi tiết đầy đủ ở
+`.claude/skills/make-slides/SKILL.md` — đây là tóm tắt:
 
-1. **Brainstorm & làm rõ** — dùng `AskUserQuestion` để chốt: khán giả, mức độ,
-   thời lượng, góc nhìn/thông điệp cốt lõi. Đừng đoán nếu câu trả lời đổi nội dung.
-2. **Research** — giao cho subagent `topic-researcher` (tìm bài viết uy tín, trích
-   điểm chính, gợi ý truy vấn ảnh). Trả về một brief có cấu trúc + nguồn.
-3. **Viết `topics/<slug>/brief.md`** — outline rõ ràng theo template, kèm nguồn và
-   gợi ý ảnh. Tạo topic bằng `node scripts/new-topic.mjs <slug>`.
-4. **DỪNG — chờ người dùng duyệt brief.** Đây là **cổng bắt buộc**. Chỉnh sửa tới
-   khi họ đồng ý. **Tuyệt đối không sinh `slides.md` trước khi brief được chấp nhận.**
-5. **Tải ảnh** — `node scripts/fetch-images.mjs <slug> --query "..." --query "..."`
-   (lấy truy vấn từ brief). Ảnh về `topics/<slug>/public/images/` + `credits.json`.
-6. **Dựng slide** — giao cho subagent `slide-builder` (hoặc tự làm) sinh `slides.md`
-   từ brief đã duyệt: theme sáng, **ảnh nền ở cover + vài slide section đầu**, đa dạng
-   layout.
-7. **Kiểm tra** — `npm run build -- <slug>` để chắc chắn compile được; báo kết quả.
-   Export PDF nếu được yêu cầu (`npm run export -- <slug>`).
+1. **Brainstorm & làm rõ** — `AskUserQuestion`: khán giả, thời lượng, góc nhìn,
+   thông điệp cốt lõi, (tuỳ chọn) URL seed.
+2. **Tạo skeleton** — `node scripts/new-topic.mjs <slug> --title "..."` (tạo
+   `brief.md` + thư mục `research/`).
+3. **Research vòng 1 (broad)** — subagent `topic-researcher` với `mode=broad` →
+   ghi `topics/<slug>/research/round-1-broad.md`.
+4. **Stage A — chọn outline (cổng 1)** — viết `brief.md` dạng "2-3 outline đề
+   xuất (pattern khác nhau) + khuyến nghị"; người dùng chọn 1 hoặc "mix".
+5. **Stage B — duyệt key points (cổng 2)** — viết `brief.md` dạng "outline đã
+   chọn + key points theo từng phần". **Loop:** người dùng có thể yêu cầu
+   research thêm (`topic-researcher` `mode=focused` ghi `round-N-<focus>.md`),
+   sửa key points, tới khi nói "OK" rõ ràng.
+6. **Stage C — brief chi tiết per-slide (cổng 3, cuối)** — viết `brief.md` chi
+   tiết từng slide (title, bullets thật, layout, image hint, presenter note);
+   slide-builder chỉ format, không sáng tác. Cổng duyệt cuối.
+7. **Tải ảnh** — `node scripts/fetch-images.mjs <slug> --query "..."` theo
+   truy vấn trong Stage C. Deck nội bộ nên không cần né bản quyền.
+8. **Dựng slide** — subagent `slide-builder` map Stage C → `slides.md`.
+9. **Build + verify** — `npm run build -- <slug>` (compile sạch). Slide-builder
+   tự export PNG slide đầu để mắt thấy cover hiển thị đúng. PDF: `npm run
+   export -- <slug>`.
+
+## Remake một topic có sẵn (skill `/remake-slides` + subagent `topic-remaker`)
+
+Khi người dùng muốn **làm lại / chỉnh / cập nhật / fix** một topic đã dựng (đã có
+`slides.md`), KHÔNG chạy lại `/make-slides` từ đầu — dùng skill `/remake-slides`.
+Nó điều phối như sau — **phần hỏi & cổng duyệt do skill (main thread) làm** vì
+subagent không tương tác được:
+
+1. **Hỏi người dùng trước** (`AskUserQuestion`): sửa nội dung gì? bổ sung ý gì?
+   vấn đề nằm ở đâu? có đổi góc nhìn / thời lượng / khán giả / pattern không?
+   → gom thành `change_directive` rõ ràng.
+2. **Giao `topic-remaker`** (`subagent_type: topic-remaker`) với `slug` +
+   `change_directive` + `phase: auto`. Subagent tự sao lưu `.bak`, phân loại
+   **NHỎ / LỚN**.
+   - **NHỎ** → nó sửa thẳng `slides.md`, build verify, trả kết quả. Xong.
+   - **LỚN** → nó refresh research (nếu cần) + viết lại `brief.md` Stage C rồi
+     **DỪNG**, trả về diff brief.
+3. **Cổng duyệt (chỉ thay đổi LỚN):** trình diff brief mới cho người dùng, sửa tới
+   khi họ OK.
+4. **Dựng lại slides:** gọi `topic-remaker` lần nữa với `phase: slides` (hoặc giao
+   `slide-builder`) để sinh `slides.md` từ brief đã duyệt; build verify.
+5. Cần ảnh mới → `node scripts/fetch-images.mjs <slug> --query "..."` trước khi dựng.
+
+Bản cũ luôn được giữ ở `slides.md.bak` / `brief.md.bak` (đã gitignore).
 
 ## Lệnh
 
@@ -48,8 +79,11 @@ npm run export -- <slug>          # PDF (cần playwright-chromium)
 
 - Slide phân tách bằng dòng `---`. **Headmatter** (cấu hình cả deck) là khối YAML
   đầu file; **frontmatter** mỗi slide là khối YAML ngay sau `---`.
-- Headmatter của mọi topic phải có `theme: slidev-theme-sharing` (theme dùng chung,
-  đã link vào `node_modules` qua npm workspaces). **KHÔNG** dùng `theme: ../../theme`.
+- Headmatter của mọi topic phải có `theme: ../../theme` (đường dẫn tương đối tới
+  thư mục theme dùng chung ở gốc repo). **KHÔNG** dùng `theme: slidev-theme-sharing`
+  — khi đó Slidev resolve theme qua symlink node_modules và auto-import component của
+  theme **không quét tới** (cụ thể `<Tag>`/`<Spotlight>` sẽ render rỗng); layouts thì
+  vẫn ổn vì được import theo đường dẫn thật.
 - Ảnh đặt ở `topics/<slug>/public/images/`, tham chiếu **đường dẫn tuyệt đối**
   `/images/<file>` (KHÔNG dùng `./public/...`).
 
@@ -106,24 +140,30 @@ number: "01"
 <Spotlight label="Key idea">Câu chốt.</Spotlight>
 ```
 
-## Nguồn ảnh & bản quyền
+## Nguồn ảnh
 
 `scripts/fetch-images.mjs` hỗ trợ nhiều nguồn (`--source`):
 
 - `web` (mặc định) — tìm bằng trình duyệt thật (Playwright, Bing Images). Liên quan
-  cao, **không cần API key**, **nhưng bản quyền hỗn hợp** → hợp dùng **nội bộ**. Script
-  tự lọc bỏ ảnh dính watermark (freepik, shutterstock, getty, adobe stock…); vẫn nên
-  **xem lại ảnh** (Read file ảnh) và loại ảnh dính watermark/quá rậm trước khi gán.
-- `cc` — chỉ ảnh Creative Commons (Openverse + Wikimedia), **an toàn bản quyền** cho
-  trình bày công khai, nhưng ít ảnh cho chủ đề mới/hẹp.
+  cao, **không cần API key**. Script tự lọc bỏ ảnh dính watermark (freepik,
+  shutterstock, getty, adobe stock…); vẫn nên **xem lại ảnh** (Read file ảnh) và
+  loại ảnh dính watermark/quá rậm trước khi gán.
+- `cc` — chỉ ảnh Creative Commons (Openverse + Wikimedia), nếu muốn ảnh CC.
 
-Mọi ảnh ghi nguồn/license trong `topics/<slug>/public/images/credits.json`. Nên thêm
-1 slide "Nguồn ảnh" cuối deck. Ảnh sơ đồ (kiến trúc, thành phần…) hợp làm `image-right`;
-ảnh atmospheric/abstract hợp làm `background:` cho cover/section.
+> Deck dùng **nội bộ** nên không cần bận tâm bản quyền — ưu tiên ảnh đẹp & liên quan.
+
+Mọi ảnh ghi nguồn trong `topics/<slug>/public/images/credits.json`. Ảnh sơ đồ (kiến
+trúc, thành phần…) hợp làm `image-right`; ảnh atmospheric/abstract hợp làm
+`background:` cho cover/section.
 
 ## Đừng
 
-- ❌ Sinh `slides.md` khi brief chưa được người dùng duyệt.
+- ❌ Sinh `slides.md` khi brief Stage C chưa được người dùng duyệt rõ ràng.
+- ❌ Nhảy stage (vd: sang Stage B khi chưa chốt outline; sang C khi key points
+  chưa OK). 3 cổng duyệt là bất khả xâm phạm.
+- ❌ Tự "chốt" khi người dùng chưa nói OK (không có giới hạn vòng research).
 - ❌ Sửa `theme/` cho nhu cầu của riêng một topic (đặc thù topic → để trong topic đó).
 - ❌ Dùng nền/màu tối; phá vỡ tông sáng.
 - ❌ Đặt ảnh ngoài `public/images/` rồi tham chiếu sai đường dẫn.
+- ❌ Dùng `theme: slidev-theme-sharing` trong headmatter — components không
+  render. Luôn dùng `theme: ../../theme`.

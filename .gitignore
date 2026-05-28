@@ -26,3 +26,7 @@ Thumbs.db
 
 # Preview/export tạm
 **/_preview/
+**/_verify/
+
+# Backup khi remake topic (topic-remaker sao lưu trước khi ghi đè)
+*.bak
