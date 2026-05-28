@@ -31,37 +31,48 @@ layout: default
 
 # Nội dung chính
 
-<div class="mt-8 flex flex-col">
-  <div class="flex gap-5">
+<div class="mt-6 flex flex-col">
+  <div class="flex gap-4">
     <div class="flex flex-col items-center">
-      <div style="flex:none;display:flex;align-items:center;justify-content:center;width:2.3rem;height:2.3rem;border-radius:9999px;background:linear-gradient(135deg,var(--sharing-accent),var(--sharing-accent-2));color:#fff;font-weight:700;font-size:1.05rem">1</div>
-      <div style="flex:1;width:2px;background:var(--sharing-border);margin-top:.3rem"></div>
+      <div style="flex:none;display:flex;align-items:center;justify-content:center;width:1.9rem;height:1.9rem;border-radius:9999px;background:linear-gradient(135deg,var(--sharing-accent),var(--sharing-accent-2));color:#fff;font-weight:700;font-size:.9rem">1</div>
+      <div style="flex:1;width:2px;background:var(--sharing-border);margin-top:.25rem"></div>
     </div>
-    <div class="pb-6">
-      <div style="font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sharing-muted);font-weight:700">Phần 1</div>
-      <div style="font-size:1.5rem;font-weight:700;color:var(--sharing-fg);line-height:1.25">Sự phát triển của AI</div>
-      <div style="color:var(--sharing-fg-soft);font-size:.95rem;margin-top:.15rem">Từ AI cổ điển, tới LLM, tới Agent — vì sao mỗi giai đoạn xuất hiện</div>
+    <div class="pb-4">
+      <div style="font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sharing-muted);font-weight:700">Phần 1</div>
+      <div style="font-size:1.2rem;font-weight:700;color:var(--sharing-fg);line-height:1.2">Sự phát triển của AI</div>
+      <div style="color:var(--sharing-fg-soft);font-size:.86rem;margin-top:.1rem">Từ AI cổ điển, tới LLM, tới Agent — vì sao mỗi giai đoạn xuất hiện</div>
     </div>
   </div>
-  <div class="flex gap-5">
+  <div class="flex gap-4">
     <div class="flex flex-col items-center">
-      <div style="flex:none;display:flex;align-items:center;justify-content:center;width:2.3rem;height:2.3rem;border-radius:9999px;background:linear-gradient(135deg,var(--sharing-accent),var(--sharing-accent-2));color:#fff;font-weight:700;font-size:1.05rem">2</div>
-      <div style="flex:1;width:2px;background:var(--sharing-border);margin-top:.3rem"></div>
+      <div style="flex:none;display:flex;align-items:center;justify-content:center;width:1.9rem;height:1.9rem;border-radius:9999px;background:linear-gradient(135deg,var(--sharing-accent),var(--sharing-accent-2));color:#fff;font-weight:700;font-size:.9rem">2</div>
+      <div style="flex:1;width:2px;background:var(--sharing-border);margin-top:.25rem"></div>
     </div>
-    <div class="pb-6">
-      <div style="font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sharing-muted);font-weight:700">Phần 2</div>
-      <div style="font-size:1.5rem;font-weight:700;color:var(--sharing-fg);line-height:1.25">Các thành phần của Agent</div>
-      <div style="color:var(--sharing-fg-soft);font-size:.95rem;margin-top:.15rem">LLM, planning, memory, tools — và bài toán bùng nổ tích hợp</div>
+    <div class="pb-4">
+      <div style="font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sharing-muted);font-weight:700">Phần 2</div>
+      <div style="font-size:1.2rem;font-weight:700;color:var(--sharing-fg);line-height:1.2">Các thành phần của Agent</div>
+      <div style="color:var(--sharing-fg-soft);font-size:.86rem;margin-top:.1rem">LLM, planning, memory, tools — và bài toán bùng nổ tích hợp</div>
     </div>
   </div>
-  <div class="flex gap-5">
+  <div class="flex gap-4">
     <div class="flex flex-col items-center">
-      <div style="flex:none;display:flex;align-items:center;justify-content:center;width:2.3rem;height:2.3rem;border-radius:9999px;background:linear-gradient(135deg,var(--sharing-accent),var(--sharing-accent-2));color:#fff;font-weight:700;font-size:1.05rem">3</div>
+      <div style="flex:none;display:flex;align-items:center;justify-content:center;width:1.9rem;height:1.9rem;border-radius:9999px;background:linear-gradient(135deg,var(--sharing-accent),var(--sharing-accent-2));color:#fff;font-weight:700;font-size:.9rem">3</div>
+      <div style="flex:1;width:2px;background:var(--sharing-border);margin-top:.25rem"></div>
+    </div>
+    <div class="pb-4">
+      <div style="font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sharing-muted);font-weight:700">Phần 3</div>
+      <div style="font-size:1.2rem;font-weight:700;color:var(--sharing-fg);line-height:1.2">MCP</div>
+      <div style="color:var(--sharing-fg-soft);font-size:.86rem;margin-top:.1rem">Chuẩn hoá kết nối, biến M×N thành M+N</div>
+    </div>
+  </div>
+  <div class="flex gap-4">
+    <div class="flex flex-col items-center">
+      <div style="flex:none;display:flex;align-items:center;justify-content:center;width:1.9rem;height:1.9rem;border-radius:9999px;background:linear-gradient(135deg,var(--sharing-accent),var(--sharing-accent-2));color:#fff;font-weight:700;font-size:.9rem">4</div>
     </div>
     <div>
-      <div style="font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sharing-muted);font-weight:700">Phần 3</div>
-      <div style="font-size:1.5rem;font-weight:700;color:var(--sharing-fg);line-height:1.25">MCP</div>
-      <div style="color:var(--sharing-fg-soft);font-size:.95rem;margin-top:.15rem">Chuẩn hoá kết nối, biến M×N thành M+N</div>
+      <div style="font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sharing-muted);font-weight:700">Phần 4</div>
+      <div style="font-size:1.2rem;font-weight:700;color:var(--sharing-fg);line-height:1.2">Demo &amp; Quizz</div>
+      <div style="color:var(--sharing-fg-soft);font-size:.86rem;margin-top:.1rem">Todo app điều khiển qua MCP (agent n8n) + quizz nhanh củng cố</div>
     </div>
   </div>
 </div>
@@ -74,7 +85,7 @@ layout: default
 </Spotlight>
 
 <!--
-Slide "Nội dung chính" — 3 phần dạng timeline dọc (HTML). Đặt kỳ vọng cấu trúc buổi.
+Slide "Nội dung chính" — 4 phần dạng timeline dọc (HTML). Đặt kỳ vọng cấu trúc buổi.
 -->
 
 ---
@@ -749,13 +760,6 @@ cho Linux Foundation = chuẩn trung lập, không bị một hãng kiểm soát
 -->
 
 ---
-layout: quote
-author: "Ẩn dụ phổ biến về MCP"
----
-
-Trước USB-C, mỗi thiết bị một đầu cắm. MCP làm điều tương tự cho AI: **một chuẩn**, nối mọi mô hình với mọi công cụ.
-
----
 layout: default
 ---
 
@@ -780,6 +784,17 @@ Cắm một MCP server (filesystem / GitHub) vào Claude hoặc IDE của bạn,
 "khám phá" tool và dùng — chỉ trong vài phút.
 </Spotlight>
 
+---
+layout: default
+---
+
+# Demo & Quizz
+
+Hỏi đáp · Q&A
+
+* Giải nhất: 50k
+* Giải nhì: 30k
+* Giải ba: 20k
 ---
 layout: end
 ---
