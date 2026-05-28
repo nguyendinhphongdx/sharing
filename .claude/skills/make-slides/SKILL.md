@@ -110,6 +110,12 @@ Trình bày tóm tắt + `AskUserQuestion` đại loại:
 Viết lại `brief.md` thành Stage C — **gần như draft slide**, slide-builder chỉ
 format + chọn layout + gắn ảnh.
 
+> **Trình bày trực quan (ưu tiên):** với nội dung hợp hình hoá (mốc thời gian, so sánh,
+> luồng/vòng lặp, ví dụ từng bước), ghi rõ trong brief là "vẽ **timeline dọc** / **thẻ grid** /
+> **sơ đồ luồng**" thay vì chỉ liệt kê bullet; **tránh code-block cho ví dụ văn xuôi** (chỉ giữ
+> cho code thật). Bộ mẫu & biến CSS xem `CLAUDE.md` mục **"Mẫu trình bày trực quan (HTML)"**.
+> slide-builder sẽ tự nâng cấp bullet/code-block thành hình nếu hợp.
+
 ```markdown
 # Brief: <Tiêu đề>  ·  Stage C — chi tiết per-slide
 
@@ -142,10 +148,11 @@ format + chọn layout + gắn ảnh.
 
 ## Slide 4 — ...
 - **Layout:** default | two-cols-header | image-right | quote
-- **Tiêu đề:** ...
-- **Bullets:** (nội dung thật, viết sẵn, có **bold** + `<Tag>term</Tag>` đã đặt)
-- **Code/Mermaid (nếu có):** đặt nguyên block sẽ lên slide
-- **Image hint:** `/images/<slug>.jpg` hoặc query nếu chưa có
+- **Tiêu đề:** ... (ngắn, friendly, 1 dòng; câu phụ → subtitle nếu cần)
+- **Trình bày:** bullet | **timeline dọc** | **thẻ (grid 2/3)** | **sơ đồ luồng/vòng lặp** — chọn dạng hợp nội dung (xem CLAUDE.md "Mẫu trình bày trực quan (HTML)")
+- **Nội dung:** (viết sẵn, có **bold** + `<Tag>term</Tag>`; nếu là thẻ/timeline/sơ đồ thì ghi rõ từng mục + nhãn)
+- **Code/Mermaid (CHỈ khi là code/sơ đồ thật):** đặt nguyên block; ví dụ văn xuôi → dùng thẻ mềm/pill, không code-block
+- **Image hint:** `/images/<slug>.jpg` hoặc query nếu chưa có (bỏ qua nếu đã vẽ hình HTML)
 - **Presenter note:** ...
 
 ...
@@ -212,6 +219,8 @@ Nếu chủ đề không hợp pattern nào trên, được phép đề xuất p
 
 - Một chủ đề = một folder `topics/<slug>/`. Không trộn nội dung topic vào `theme/`.
 - Song ngữ; theme sáng; chính xác hơn hoa mỹ — không bịa số liệu/nguồn/ảnh.
+- **Ưu tiên trình bày trực quan bằng HTML** (timeline / thẻ grid / sơ đồ luồng-vòng lặp) hơn
+  bullet hay code-block văn xuôi — xem `CLAUDE.md` mục "Mẫu trình bày trực quan (HTML)".
 - **3 cổng duyệt** là bất khả xâm phạm: chọn outline (Stage A), OK key points
   (Stage B), duyệt brief chi tiết (Stage C). Không nhảy bước, không tự chốt khi
   người dùng chưa rõ ràng.

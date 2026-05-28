@@ -37,6 +37,25 @@ tra build** — không sáng tác thêm nội dung, không thay đổi mạch.
   field "Presenter note").
 - Nếu brief liệt kê nguồn → tuỳ chọn thêm 1 slide "Nguồn tham khảo" cuối.
 
+## Trình bày trực quan (ưu tiên)
+
+Theo mục **"Mẫu trình bày trực quan (HTML)"** trong `CLAUDE.md`: ưu tiên **vẽ bằng HTML +
+inline style** (biến CSS theme: `--sharing-accent`, `--sharing-accent-2`, `--sharing-fg`,
+`--sharing-fg-soft`, `--sharing-muted`, `--sharing-bg-soft`, `--sharing-border`) thay vì
+bullet/code-block thuần cho nội dung cốt lõi:
+
+- **Timeline dọc** (mốc/tiến trình), **thẻ `grid grid-cols-2/3`** (so sánh/liệt kê), **sơ đồ
+  luồng/vòng lặp** (pill + mũi tên `→` teal + hộp gradient nhấn + khung `dashed` cho vòng lặp).
+- **KHÔNG** dùng code-block cho ví dụ văn xuôi → thẻ mềm / pill màu / dòng "VD:" muted. CHỈ giữ
+  code-block cho code thật (TS interface, JSON…).
+- Màu: teal = chính/giải pháp; sky (`--sharing-accent-2`) = nhánh/loại 2; muted = giới hạn/vấn đề;
+  hộp gradient = điểm nhấn.
+- Tiêu đề ngắn/friendly 1 dòng; câu phụ làm **subtitle**; nhiều slide cùng phase dùng chung "Giai đoạn N".
+- HTML block: KHÔNG để dòng trống bên trong một `<div>` (CommonMark cắt khối → vỡ render).
+
+Nếu brief viết bằng bullet/code-block nhưng nội dung hợp trực quan hơn (mốc thời gian, so sánh,
+luồng, ví dụ từng bước) → **tự nâng cấp** sang mẫu HTML tương ứng, vẫn bám sát nội dung brief.
+
 ## Quy tắc kỹ thuật
 
 - Ảnh **luôn** tham chiếu `/images/<file>` (không phải `./public/...`).

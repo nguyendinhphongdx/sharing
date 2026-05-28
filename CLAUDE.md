@@ -75,6 +75,45 @@ npm run export -- <slug>          # PDF (cần playwright-chromium)
 - Mỗi ý một dòng; ưu tiên gạch đầu dòng ngắn hơn đoạn văn dài. Tối đa ~6 bullet/slide.
 - Dùng `<Tag>` cho nhãn term, `<Spotlight>` cho câu chốt quan trọng.
 
+## Mẫu trình bày trực quan (HTML) — ƯU TIÊN
+
+Ưu tiên **vẽ bằng HTML + inline style** (dùng biến CSS của theme) thay vì bullet/code-block
+thuần cho nội dung cốt lõi — deck đẹp & dễ hiểu hơn hẳn. Biến CSS dùng được (định nghĩa ở
+`theme/styles/base.css`): `--sharing-accent` (teal), `--sharing-accent-2` (sky),
+`--sharing-fg`, `--sharing-fg-soft`, `--sharing-muted`, `--sharing-bg-soft`,
+`--sharing-border`. Class UnoCSS có sẵn: `flex`, `grid grid-cols-2/3`, `gap-*`, `mt-*`,
+`items-center`, `justify-center`, `flex-wrap`.
+
+**Ba mẫu hay dùng:**
+
+- **Timeline dọc** — cột rail gồm dot teal (có quầng `box-shadow:0 0 0 4px color-mix(in srgb,var(--sharing-accent) 16%,transparent)`)
+  nối nhau bằng line `width:2px;background:var(--sharing-border)`; bên cạnh là nội dung (năm/nhãn
+  in đậm teal, mô tả `--sharing-fg-soft`, dòng phụ nhỏ `--sharing-muted`). Item cuối bỏ đường nối.
+- **Thẻ (cards)** — `background:var(--sharing-bg-soft)` + `border-left`/`border-top` 3–4px màu
+  accent + nhãn đậm teal + mô tả muted. Dùng `grid grid-cols-2/3 gap-4` để so sánh / liệt kê.
+- **Sơ đồ luồng / vòng lặp** — pill (`border` + `border-radius`) nối bằng mũi tên `→` teal;
+  hộp nhấn dùng `linear-gradient(135deg,var(--sharing-accent),var(--sharing-accent-2))` +
+  `box-shadow`; nhóm vòng lặp bằng khung `border:1.5px dashed var(--sharing-accent)` + nhãn `↺`.
+
+**Quy tắc:**
+
+- **KHÔNG** dùng code-block (` ```text `) cho ví dụ văn xuôi → chuyển thành thẻ mềm / pill màu /
+  dòng "VD:" muted. CHỈ giữ code-block cho **code thật** (TS interface, JSON-RPC…).
+- **Gộp, đừng lặp:** đừng vừa bullet vừa thẻ nói cùng một ý — nhồi khái niệm + ví dụ vào trong thẻ.
+- **Màu:** teal = chính / giải pháp / positive; sky (`--sharing-accent-2`) = nhánh hoặc loại thứ 2
+  (vd brute-force teal vs learning sky); muted/xám = giới hạn / vấn đề; hộp gradient = điểm nhấn
+  (kết quả, "Transformer", "Hoàn thành").
+- **Tiêu đề** ngắn, friendly, 1 dòng (giọng kể: "Khi máy bắt đầu thắng người"); câu phụ để làm
+  **subtitle** (div đậm dưới H1); nhiều slide cùng một phase thì dùng chung nhãn **"Giai đoạn N"** ở title.
+- **HTML block: KHÔNG để dòng trống bên trong** một khối `<div>` (CommonMark cắt khối ở dòng
+  trống → vỡ render) — viết liền các thẻ con, chỉ chừa dòng trống GIỮA các khối top-level.
+- **Ảnh nhúng trong HTML block phải bind `:src`**: `<img :src="'/images/x.png'" alt="..." style="...">`
+  — KHÔNG dùng `src="/images/..."` tĩnh (Vite cố import → build lỗi *"resolves outside server.fs.allow"*,
+  ra `D:\images`). Bind biến `:src` để Vue coi là URL public runtime. (Còn ảnh nền layout vẫn dùng
+  `image:`/`background:` trong frontmatter như thường.)
+- Luôn **verify bằng export PNG** từng slide vừa sửa (xem mục slide-builder); đảm bảo vừa khung,
+  không tràn. Bỏ ảnh stock dính watermark / product-photo — nếu vẽ được bằng HTML thì ưu tiên vẽ.
+
 ## Cú pháp Slidev cần nhớ
 
 - Slide phân tách bằng dòng `---`. **Headmatter** (cấu hình cả deck) là khối YAML

@@ -39,6 +39,16 @@
       "license": "web — cần kiểm tra bản quyền nếu công khai",
       "provider": "Open Threat Research (via Bing Images)",
       "usedFor": "image-right: slide thành phần agent"
+    },
+    {
+      "file": "images/04-usb-type-c-cable-on-leather-background.jpg",
+      "ref": "/images/04-usb-type-c-cable-on-leather-background.jpg",
+      "title": "USB Type-C cable on leather background",
+      "descriptionUrl": "https://www.flickr.com/photos/26344495@N05/47387161891",
+      "license": "CC BY 2.0",
+      "artist": "Ivan Radic",
+      "provider": "Openverse/flickr",
+      "usedFor": "background: section MCP — USB-C cho AI Agent"
     }
   ]
 }

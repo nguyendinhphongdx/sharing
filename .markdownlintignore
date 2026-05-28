@@ -1,0 +1,9 @@
+# File nguồn Slidev & brief KHÔNG phải markdown prose — chúng dùng per-slide H1,
+# inline Vue component (<Tag>/<Spotlight>), dấu --- phân tách slide… nên không lint
+# theo chuẩn prose. Chỉ lint README.md / CLAUDE.md.
+topics/**/slides.md
+topics/**/slides.md.bak
+topics/**/brief.md
+topics/**/brief.md.bak
+topics/**/research/**
+templates/**/*.md
