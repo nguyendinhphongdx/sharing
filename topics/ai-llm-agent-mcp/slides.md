@@ -828,7 +828,6 @@ Hỏi đáp · Q&A
 
 * Giải nhất: 50k
 * Giải nhì: 30k
-* Giải ba: 20k
 ---
 layout: end
 ---
