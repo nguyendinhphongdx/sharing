@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Todo App — demo MCP</title>
+  <style>
+    :root {
+      --accent: #0d9488;
+      --accent-2: #0ea5e9;
+      --fg: #0f172a;
+      --fg-soft: #334155;
+      --muted: #64748b;
+      --bg: #f8fafc;
+      --bg-soft: #f1f5f9;
+      --border: #e2e8f0;
+      --done: #94a3b8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      display: flex;
+      justify-content: center;
+      padding: 32px 16px;
+    }
+    .app { width: 100%; max-width: 640px; }
+    header { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
+    h1 { font-size: 28px; margin: 0; }
+    .live {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; color: var(--muted); margin-left: auto;
+    }
+    .dot {
+      width: 9px; height: 9px; border-radius: 50%; background: var(--accent);
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
+      animation: pulse 1.4s ease-in-out infinite;
+    }
+    @keyframes pulse { 50% { opacity: .35; } }
+    .sub { color: var(--muted); margin: 0 0 20px; font-size: 14px; }
+    form { display: flex; gap: 10px; margin-bottom: 18px; }
+    input[type=text] {
+      flex: 1; padding: 12px 14px; font-size: 16px;
+      border: 1.5px solid var(--border); border-radius: 10px; outline: none;
+      background: #fff;
+    }
+    input[type=text]:focus { border-color: var(--accent); }
+    button {
+      font-size: 15px; font-weight: 600; border: none; border-radius: 10px;
+      padding: 12px 18px; cursor: pointer;
+      background: var(--accent); color: #fff;
+    }
+    button:hover { filter: brightness(1.05); }
+    ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+    li {
+      display: flex; align-items: center; gap: 12px;
+      background: #fff; border: 1.5px solid var(--border); border-left: 4px solid var(--accent);
+      border-radius: 12px; padding: 12px 14px;
+      transition: background .25s, border-color .25s;
+    }
+    li.done { border-left-color: var(--done); background: var(--bg-soft); }
+    li.flash { animation: flash 1.1s ease-out; }
+    @keyframes flash {
+      0% { background: color-mix(in srgb, var(--accent) 22%, #fff); transform: scale(1.015); }
+      100% { background: #fff; transform: scale(1); }
+    }
+    .check {
+      width: 22px; height: 22px; flex: none; cursor: pointer;
+      border: 2px solid var(--accent); border-radius: 6px;
+      display: grid; place-items: center; color: #fff; font-size: 14px; font-weight: 700;
+    }
+    li.done .check { background: var(--done); border-color: var(--done); }
+    .title { flex: 1; font-size: 17px; }
+    li.done .title { color: var(--done); text-decoration: line-through; }
+    .id { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .del {
+      background: transparent; color: var(--muted); padding: 4px 8px; font-size: 18px;
+      line-height: 1; border-radius: 8px;
+    }
+    .del:hover { background: #fee2e2; color: #dc2626; }
+    .empty { text-align: center; color: var(--muted); padding: 32px 0; }
+    footer { margin-top: 22px; font-size: 13px; color: var(--muted); text-align: center; }
+    footer b { color: var(--accent); }
+
+    .gear {
+      margin-left: 10px; background: var(--bg-soft); color: var(--fg-soft);
+      padding: 8px 10px; font-size: 17px; line-height: 1; border-radius: 10px;
+      border: 1.5px solid var(--border);
+    }
+    .gear:hover { background: #fff; border-color: var(--accent); color: var(--accent); }
+    .overlay {
+      position: fixed; inset: 0; background: rgba(15, 23, 42, .45);
+      display: none; align-items: center; justify-content: center; padding: 16px; z-index: 50;
+    }
+    .overlay.open { display: flex; }
+    .modal {
+      background: #fff; border-radius: 16px; padding: 22px; width: 100%; max-width: 560px;
+      box-shadow: 0 20px 50px rgba(15, 23, 42, .25);
+    }
+    .modal h2 { margin: 0 0 4px; font-size: 20px; }
+    .modal .hint { margin: 0 0 16px; font-size: 13px; color: var(--muted); }
+    .info-row { margin-bottom: 14px; }
+    .info-row .label { font-size: 12px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: .03em; }
+    .info-val {
+      display: flex; align-items: center; gap: 8px; margin-top: 4px;
+      background: var(--bg-soft); border: 1.5px solid var(--border); border-radius: 10px; padding: 8px 10px;
+    }
+    .info-val code { flex: 1; font-family: ui-monospace, "Cascadia Code", monospace; font-size: 14px; color: var(--fg); word-break: break-all; }
+    .copy-btn { background: var(--accent); color: #fff; font-size: 12px; padding: 6px 10px; border-radius: 8px; flex: none; }
+    .copy-btn.copied { background: var(--fg-soft); }
+    .modal .close { background: var(--bg-soft); color: var(--fg-soft); width: 100%; margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>📋 Todo App</h1>
+      <span class="live"><span class="dot"></span> live · tự cập nhật</span>
+      <button class="gear" id="gear" title="Thông tin kết nối (cho n8n)">⚙</button>
+    </header>
+    <p class="sub">REST + <b>MCP server</b> dùng chung 1 danh sách. Agent (n8n) thao tác qua MCP → danh sách tự đổi.</p>
+
+    <form id="add-form">
+      <input type="text" id="title" placeholder="Thêm công việc mới…" autocomplete="off" />
+      <button type="submit">Thêm</button>
+    </form>
+
+    <ul id="list"></ul>
+    <footer>Agent gọi tool <b>add_todo / complete_todo / delete_todo</b> → bạn thấy thay đổi ngay tại đây.</footer>
+  </div>
+
+  <div class="overlay" id="overlay">
+    <div class="modal">
+      <h2>Thông tin kết nối MCP</h2>
+      <p class="hint">Dán vào node <b>MCP Client Tool</b> trong n8n. Khi mở trang này qua tunnel, URL bên dưới tự đổi theo domain tunnel.</p>
+      <div id="info-rows"></div>
+      <button class="close" id="close">Đóng</button>
+    </div>
+  </div>
+
+  <script>
+    const listEl = document.getElementById("list");
+    const form = document.getElementById("add-form");
+    const titleEl = document.getElementById("title");
+    let knownIds = new Set();
+    let lastJSON = "";
+
+    async function api(path, opts) {
+      const res = await fetch(path, { headers: { "Content-Type": "application/json" }, ...opts });
+      return res.json().catch(() => null);
+    }
+
+    function render(todos) {
+      const json = JSON.stringify(todos);
+      if (json === lastJSON) return; // khong doi -> khoi ve lai
+      lastJSON = json;
+
+      if (!todos.length) {
+        listEl.innerHTML = '<li class="empty">Chưa có công việc nào.</li>';
+        knownIds = new Set();
+        return;
+      }
+      const ids = new Set(todos.map((t) => t.id));
+      listEl.innerHTML = "";
+      for (const t of todos) {
+        const li = document.createElement("li");
+        li.className = t.done ? "done" : "";
+        if (!knownIds.has(t.id)) li.classList.add("flash"); // todo moi -> nhay sang
+        li.innerHTML = `
+          <div class="check" data-complete="${t.id}">${t.done ? "✓" : ""}</div>
+          <span class="title">${escapeHtml(t.title)}</span>
+          <span class="id">#${t.id}</span>
+          <button class="del" data-del="${t.id}" title="Xoá">✕</button>`;
+        listEl.appendChild(li);
+      }
+      knownIds = ids;
+    }
+
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, (c) =>
+        ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    }
+
+    async function poll() {
+      try {
+        const todos = await api("/api/todos");
+        if (Array.isArray(todos)) render(todos);
+      } catch {}
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const title = titleEl.value.trim();
+      if (!title) return;
+      titleEl.value = "";
+      await api("/api/todos", { method: "POST", body: JSON.stringify({ title }) });
+      poll();
+    });
+
+    listEl.addEventListener("click", async (e) => {
+      const c = e.target.closest("[data-complete]");
+      const d = e.target.closest("[data-del]");
+      if (c) {
+        const id = c.dataset.complete;
+        const done = !c.closest("li").classList.contains("done");
+        await api(`/api/todos/${id}/complete`, { method: "POST", body: JSON.stringify({ done }) });
+        poll();
+      } else if (d) {
+        await api(`/api/todos/${d.dataset.del}`, { method: "DELETE" });
+        poll();
+      }
+    });
+
+    poll();
+    setInterval(poll, 1000);
+
+    // --- Settings: thong tin ket noi cho n8n ---
+    const overlay = document.getElementById("overlay");
+    const rowsEl = document.getElementById("info-rows");
+
+    function infoRow(label, value) {
+      return `
+        <div class="info-row">
+          <div class="label">${label}</div>
+          <div class="info-val"><code>${escapeHtml(value)}</code>
+            <button class="copy-btn" data-copy="${escapeHtml(value)}">Copy</button>
+          </div>
+        </div>`;
+    }
+
+    async function openInfo() {
+      const origin = window.location.origin;
+      let token = "demo-secret-123";
+      try {
+        const info = await api("/api/info");
+        if (info?.token != null) token = info.token;
+      } catch {}
+      rowsEl.innerHTML =
+        infoRow("MCP endpoint — HTTP Streamable (khuyến nghị)", origin + "/mcp") +
+        infoRow("MCP endpoint — SSE (n8n cũ)", origin + "/sse") +
+        infoRow("Bearer token", token) +
+        infoRow("Web UI", origin + "/");
+      overlay.classList.add("open");
+    }
+
+    document.getElementById("gear").addEventListener("click", openInfo);
+    document.getElementById("close").addEventListener("click", () => overlay.classList.remove("open"));
+    overlay.addEventListener("click", (e) => { if (e.target === overlay) overlay.classList.remove("open"); });
+
+    rowsEl.addEventListener("click", async (e) => {
+      const btn = e.target.closest("[data-copy]");
+      if (!btn) return;
+      try { await navigator.clipboard.writeText(btn.dataset.copy); } catch {}
+      btn.textContent = "Đã copy ✓";
+      btn.classList.add("copied");
+      setTimeout(() => { btn.textContent = "Copy"; btn.classList.remove("copied"); }, 1200);
+    });
+  </script>
+</body>
+</html>

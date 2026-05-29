@@ -14,7 +14,7 @@ drawings:
 
 # Sự tiến hóa của AI
 
-Cùng dạo một vòng xem AI đã lớn lên thế nào — từ bàn cờ, tới LLM, tới Agent.
+Quá trình trưởng thành — từ If else, tới LLM, tới Agent.
 
 <div class="mt-4 text-sm opacity-70">
 Buổi chia sẻ kiến thức · 2026-05-28
@@ -31,48 +31,61 @@ layout: default
 
 # Nội dung chính
 
-<div class="mt-8 flex flex-col">
-  <div class="flex gap-5">
+<div class="mt-6 flex flex-col">
+  <div class="flex gap-4">
     <div class="flex flex-col items-center">
-      <div style="flex:none;display:flex;align-items:center;justify-content:center;width:2.3rem;height:2.3rem;border-radius:9999px;background:linear-gradient(135deg,var(--sharing-accent),var(--sharing-accent-2));color:#fff;font-weight:700;font-size:1.05rem">1</div>
-      <div style="flex:1;width:2px;background:var(--sharing-border);margin-top:.3rem"></div>
+      <div style="flex:none;display:flex;align-items:center;justify-content:center;width:1.9rem;height:1.9rem;border-radius:9999px;background:linear-gradient(135deg,var(--sharing-accent),var(--sharing-accent-2));color:#fff;font-weight:700;font-size:.9rem">1</div>
+      <div style="flex:1;width:2px;background:var(--sharing-border);margin-top:.25rem"></div>
     </div>
-    <div class="pb-6">
-      <div style="font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sharing-muted);font-weight:700">Phần 1</div>
-      <div style="font-size:1.5rem;font-weight:700;color:var(--sharing-fg);line-height:1.25">Sự phát triển của AI</div>
-      <div style="color:var(--sharing-fg-soft);font-size:.95rem;margin-top:.15rem">Từ AI cổ điển, tới LLM, tới Agent — vì sao mỗi giai đoạn xuất hiện</div>
+    <div class="pb-4">
+      <div style="font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sharing-muted);font-weight:700">Phần 1</div>
+      <div style="font-size:1.2rem;font-weight:700;color:var(--sharing-fg);line-height:1.2">Sự phát triển của AI</div>
+      <div style="color:var(--sharing-fg-soft);font-size:.86rem;margin-top:.1rem">Từ AI cổ điển, tới LLM, tới Agent — vì sao mỗi giai đoạn xuất hiện</div>
     </div>
   </div>
-  <div class="flex gap-5">
+  <div class="flex gap-4">
     <div class="flex flex-col items-center">
-      <div style="flex:none;display:flex;align-items:center;justify-content:center;width:2.3rem;height:2.3rem;border-radius:9999px;background:linear-gradient(135deg,var(--sharing-accent),var(--sharing-accent-2));color:#fff;font-weight:700;font-size:1.05rem">2</div>
-      <div style="flex:1;width:2px;background:var(--sharing-border);margin-top:.3rem"></div>
+      <div style="flex:none;display:flex;align-items:center;justify-content:center;width:1.9rem;height:1.9rem;border-radius:9999px;background:linear-gradient(135deg,var(--sharing-accent),var(--sharing-accent-2));color:#fff;font-weight:700;font-size:.9rem">2</div>
+      <div style="flex:1;width:2px;background:var(--sharing-border);margin-top:.25rem"></div>
     </div>
-    <div class="pb-6">
-      <div style="font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sharing-muted);font-weight:700">Phần 2</div>
-      <div style="font-size:1.5rem;font-weight:700;color:var(--sharing-fg);line-height:1.25">Các thành phần của Agent</div>
-      <div style="color:var(--sharing-fg-soft);font-size:.95rem;margin-top:.15rem">LLM, planning, memory, tools — và bài toán bùng nổ tích hợp</div>
+    <div class="pb-4">
+      <div style="font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sharing-muted);font-weight:700">Phần 2</div>
+      <div style="font-size:1.2rem;font-weight:700;color:var(--sharing-fg);line-height:1.2">Các thành phần của Agent</div>
+      <div style="color:var(--sharing-fg-soft);font-size:.86rem;margin-top:.1rem">LLM, planning, memory, tools — và bài toán bùng nổ tích hợp</div>
     </div>
   </div>
-  <div class="flex gap-5">
+  <div class="flex gap-4">
     <div class="flex flex-col items-center">
-      <div style="flex:none;display:flex;align-items:center;justify-content:center;width:2.3rem;height:2.3rem;border-radius:9999px;background:linear-gradient(135deg,var(--sharing-accent),var(--sharing-accent-2));color:#fff;font-weight:700;font-size:1.05rem">3</div>
+      <div style="flex:none;display:flex;align-items:center;justify-content:center;width:1.9rem;height:1.9rem;border-radius:9999px;background:linear-gradient(135deg,var(--sharing-accent),var(--sharing-accent-2));color:#fff;font-weight:700;font-size:.9rem">3</div>
+      <div style="flex:1;width:2px;background:var(--sharing-border);margin-top:.25rem"></div>
+    </div>
+    <div class="pb-4">
+      <div style="font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sharing-muted);font-weight:700">Phần 3</div>
+      <div style="font-size:1.2rem;font-weight:700;color:var(--sharing-fg);line-height:1.2">MCP</div>
+      <div style="color:var(--sharing-fg-soft);font-size:.86rem;margin-top:.1rem">Chuẩn hoá kết nối, biến M×N thành M+N</div>
+    </div>
+  </div>
+  <div class="flex gap-4">
+    <div class="flex flex-col items-center">
+      <div style="flex:none;display:flex;align-items:center;justify-content:center;width:1.9rem;height:1.9rem;border-radius:9999px;background:linear-gradient(135deg,var(--sharing-accent),var(--sharing-accent-2));color:#fff;font-weight:700;font-size:.9rem">4</div>
     </div>
     <div>
-      <div style="font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sharing-muted);font-weight:700">Phần 3</div>
-      <div style="font-size:1.5rem;font-weight:700;color:var(--sharing-fg);line-height:1.25">MCP</div>
-      <div style="color:var(--sharing-fg-soft);font-size:.95rem;margin-top:.15rem">Chuẩn hoá kết nối, biến M×N thành M+N</div>
+      <div style="font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sharing-muted);font-weight:700">Phần 4</div>
+      <div style="font-size:1.2rem;font-weight:700;color:var(--sharing-fg);line-height:1.2">Demo &amp; Quizz</div>
+      <div style="color:var(--sharing-fg-soft);font-size:.86rem;margin-top:.1rem">Todo app điều khiển qua MCP (agent n8n) + quizz nhanh củng cố</div>
     </div>
   </div>
 </div>
 
 <Spotlight label="Thông điệp cốt lõi" class="mt-4">
-Agent mạnh lên nhờ <strong>tools</strong>. Nhưng tools nhiều lên thì tích hợp vỡ trận —
-<strong>MCP</strong> chuẩn hoá lớp kết nối để mọi agent dùng chung mọi tool.
+<ul>
+<li>- Sức mạnh của Agent được đánh giá bởi <strong>tools</strong>.</li>
+<li>- Nhưng tools nhiều lên thì việc tích hợp trở nên rối — <strong>MCP</strong> là cách giải quyết vấn đề đó.</li>
+</ul>
 </Spotlight>
 
 <!--
-Slide "Nội dung chính" — 3 phần dạng timeline dọc (HTML). Đặt kỳ vọng cấu trúc buổi.
+Slide "Nội dung chính" — 4 phần dạng timeline dọc (HTML). Đặt kỳ vọng cấu trúc buổi.
 -->
 
 ---
@@ -631,7 +644,7 @@ layout: default
 # Cấu tạo MCP: 2 lớp & primitives
 
 <div class="mt-3 flex flex-col gap-2">
-  <div style="background:color-mix(in srgb,var(--sharing-accent) 9%,white);border-left:4px solid var(--sharing-accent);border-radius:.5rem;padding:.55rem .9rem"><span style="font-weight:700;color:var(--sharing-accent)">Data layer · JSON-RPC 2.0</span><span style="color:var(--sharing-fg-soft)"> — vòng đời, thương lượng năng lực, và các <strong>primitives</strong> (nội dung trao đổi)</span></div>
+  <div style="background:color-mix(in srgb,var(--sharing-accent) 9%,white);border-left:4px solid var(--sharing-accent);border-radius:.5rem;padding:.55rem .9rem"><span style="font-weight:700;color:var(--sharing-accent)">Data layer · JSON-RPC 2.0</span><span style="color:var(--sharing-fg-soft)"> — vòng đời, thương lượng năng lực, và các <strong>primitives</strong></span></div>
   <div style="background:color-mix(in srgb,var(--sharing-accent-2) 9%,white);border-left:4px solid var(--sharing-accent-2);border-radius:.5rem;padding:.55rem .9rem"><span style="font-weight:700;color:#0369a1">Transport layer</span><span style="color:var(--sharing-fg-soft)"> — <strong>stdio</strong> (local) · <strong>Streamable HTTP</strong> (remote, + OAuth)</span></div>
 </div>
 
@@ -660,6 +673,48 @@ layout: default
 <!--
 Tools (làm) vs Resources (dữ liệu) vs Prompts (mẫu) — ví dụ 1 dòng giúp phân biệt.
 2 lớp: data (JSON-RPC, primitives) tách khỏi transport (stdio/HTTP).
+-->
+
+---
+layout: default
+---
+
+# Data layer: JSON-RPC & vòng đời
+
+Mọi message trên data layer là **JSON-RPC 2.0** — có `method`, `params`, `id`.
+
+<div class="mt-5 grid grid-cols-2 gap-7 items-start">
+<div>
+<div style="font-weight:700;color:var(--sharing-accent);font-size:.75rem;text-transform:uppercase;letter-spacing:.09em;margin-bottom:.45rem">Ví dụ một lời gọi</div>
+<pre class="mcp-json"><span class="p">{</span> <span class="k">"jsonrpc"</span>: <span class="s">"2.0"</span>, <span class="k">"id"</span>: <span class="s">1</span>,
+  <span class="k">"method"</span>: <span class="s">"tools/call"</span>,
+  <span class="k">"params"</span>: <span class="p">{</span> <span class="k">"name"</span>: <span class="s">"query_db"</span>,
+    <span class="k">"arguments"</span>: <span class="p">{</span> <span class="k">"sql"</span>: <span class="s">"SELECT ..."</span> <span class="p">} } }</span></pre>
+<div class="text-sm" style="color:var(--sharing-muted);margin-top:.55rem">Client gọi 1 tool trên server — cùng format chạy trên stdio hay HTTP.</div>
+</div>
+<div>
+<div style="font-weight:700;color:var(--sharing-accent);font-size:.75rem;text-transform:uppercase;letter-spacing:.09em">Vòng đời (lifecycle)</div>
+<div style="color:var(--sharing-muted);font-size:.85rem;margin:.2rem 0 .7rem">bắt tay → làm việc → đóng</div>
+<div style="display:flex;flex-direction:column;gap:.6rem">
+<div style="display:flex;gap:.6rem;align-items:flex-start"><span style="flex:none;width:1.5rem;height:1.5rem;border-radius:999px;background:var(--sharing-accent);color:#fff;font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center">1</span><div style="color:var(--sharing-fg-soft);font-size:.92rem;line-height:1.45"><strong>initialize</strong> — client gửi version + năng lực của mình</div></div>
+<div style="display:flex;gap:.6rem;align-items:flex-start"><span style="flex:none;width:1.5rem;height:1.5rem;border-radius:999px;background:var(--sharing-accent);color:#fff;font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center">2</span><div style="color:var(--sharing-fg-soft);font-size:.92rem;line-height:1.45">Server đáp lại năng lực của nó</div></div>
+<div style="display:flex;gap:.6rem;align-items:flex-start"><span style="flex:none;width:1.5rem;height:1.5rem;border-radius:999px;background:var(--sharing-accent);color:#fff;font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center">3</span><div style="color:var(--sharing-fg-soft);font-size:.92rem;line-height:1.45"><code>notifications/initialized</code> → trao đổi (<code>tools/list</code>, <code>tools/call</code>…)</div></div>
+<div style="display:flex;gap:.6rem;align-items:flex-start"><span style="flex:none;width:1.5rem;height:1.5rem;border-radius:999px;background:var(--sharing-muted);color:#fff;font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center">4</span><div style="color:var(--sharing-fg-soft);font-size:.92rem;line-height:1.45">Đóng kết nối (shutdown)</div></div>
+</div>
+<div style="background:color-mix(in srgb,var(--sharing-accent) 8%,white);border-radius:.5rem;padding:.5rem .75rem;margin-top:.8rem;font-size:.82rem;color:var(--sharing-fg-soft)"><strong style="color:var(--sharing-accent)">Bước 1–2</strong> = <em>capability negotiation</em>: hai bên khai báo hỗ trợ gì trước khi làm việc.</div>
+</div>
+</div>
+
+<style scoped>
+.mcp-json{margin:0;background:var(--sharing-bg-soft);border:1px solid var(--sharing-border);border-radius:.6rem;padding:.85rem 1rem;font-size:.82rem;line-height:1.65;color:var(--sharing-fg);overflow:auto;font-family:'Fira Code',ui-monospace,monospace}
+.mcp-json .k{color:#0f766e}
+.mcp-json .s{color:#b45309}
+.mcp-json .p{color:var(--sharing-muted)}
+</style>
+
+<!--
+Nhấn: capability negotiation ở bước 1-2 (hai bên khai mình hỗ trợ gì trước khi làm việc).
+Cùng format JSON-RPC bất kể transport (stdio/HTTP).
 -->
 
 ---
@@ -737,13 +792,6 @@ cho Linux Foundation = chuẩn trung lập, không bị một hãng kiểm soát
 -->
 
 ---
-layout: quote
-author: "Ẩn dụ phổ biến về MCP"
----
-
-Trước USB-C, mỗi thiết bị một đầu cắm. MCP làm điều tương tự cho AI: **một chuẩn**, nối mọi mô hình với mọi công cụ.
-
----
 layout: default
 ---
 
@@ -768,6 +816,17 @@ Cắm một MCP server (filesystem / GitHub) vào Claude hoặc IDE của bạn,
 "khám phá" tool và dùng — chỉ trong vài phút.
 </Spotlight>
 
+---
+layout: default
+---
+
+# Demo & Quizz
+
+Hỏi đáp · Q&A
+
+* Giải nhất: 50k
+* Giải nhì: 30k
+* Giải ba: 20k
 ---
 layout: end
 ---
