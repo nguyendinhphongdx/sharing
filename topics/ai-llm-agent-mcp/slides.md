@@ -487,33 +487,35 @@ Tool = name + description + execute. Nhấn: description là thứ LLM đọc đ
 layout: default
 ---
 
-# Function calling — cách LLM gọi tool
+# Function calling — LLM gọi, app thực thi
 
-LLM không tự chạy code/API — nó **xuất một lời gọi có cấu trúc** (tên tool + tham số); app thực thi rồi đưa **kết quả** lại cho LLM.
-
-<div class="mt-4 flex items-center justify-center gap-2" style="flex-wrap:wrap">
-  <span style="padding:.4rem .7rem;border:1px solid var(--sharing-border);border-radius:.5rem;background:#fff;color:var(--sharing-fg-soft);font-weight:600">Người dùng hỏi</span>
-  <span style="color:var(--sharing-accent);font-size:1.3rem;font-weight:700">→</span>
-  <span style="padding:.4rem .7rem;border-radius:.5rem;background:color-mix(in srgb,var(--sharing-accent) 12%,white);color:#0f766e;font-weight:700">LLM chọn tool + điền tham số</span>
-  <span style="color:var(--sharing-accent);font-size:1.3rem;font-weight:700">→</span>
-  <span style="padding:.4rem .7rem;border-radius:.5rem;background:color-mix(in srgb,var(--sharing-accent) 12%,white);color:#0f766e;font-weight:700">App chạy, trả kết quả</span>
-  <span style="color:var(--sharing-accent);font-size:1.3rem;font-weight:700">→</span>
-  <span style="padding:.4rem .8rem;border-radius:.5rem;background:linear-gradient(135deg,var(--sharing-accent),var(--sharing-accent-2));color:#fff;font-weight:700">LLM trả lời</span>
+<div class="mt-3 grid grid-cols-2 gap-6 items-center">
+  <div class="flex flex-col gap-3">
+    <div style="display:flex;align-items:flex-start;gap:.7rem">
+      <span style="flex:none;display:inline-flex;align-items:center;justify-content:center;width:1.7rem;height:1.7rem;border-radius:9999px;background:var(--sharing-accent);color:#fff;font-weight:700;font-size:.85rem;margin-top:.1rem">1</span>
+      <div><span style="font-weight:700;color:var(--sharing-accent)">LLM</span> quyết định gọi tool nào + điền tham số → <strong>phát ra lời gọi</strong> có cấu trúc:<div style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.78rem;background:var(--sharing-bg-soft);border:1px solid var(--sharing-border);border-radius:.4rem;padding:.3rem .6rem;margin-top:.3rem;color:var(--sharing-fg)">{ "name": "get_weather",<br>&nbsp;&nbsp;"arguments": { "city": "Hà Nội" } }</div></div>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:.7rem">
+      <span style="flex:none;display:inline-flex;align-items:center;justify-content:center;width:1.7rem;height:1.7rem;border-radius:9999px;background:var(--sharing-accent-2);color:#fff;font-weight:700;font-size:.85rem;margin-top:.1rem">2</span>
+      <div><span style="font-weight:700;color:#0369a1">App / runtime</span> <strong>thực thi</strong> tool thật — gọi API · DB · chạy code. <span style="color:var(--sharing-muted)">(LLM không tự chạy được.)</span></div>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:.7rem">
+      <span style="flex:none;display:inline-flex;align-items:center;justify-content:center;width:1.7rem;height:1.7rem;border-radius:9999px;background:var(--sharing-accent-2);color:#fff;font-weight:700;font-size:.85rem;margin-top:.1rem">3</span>
+      <div><span style="font-weight:700;color:#0369a1">App → LLM</span> đưa <strong>kết quả</strong> về (tool result): <em style="color:var(--sharing-fg)">"Hà Nội 31°C, nắng"</em></div>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:.7rem">
+      <span style="flex:none;display:inline-flex;align-items:center;justify-content:center;width:1.7rem;height:1.7rem;border-radius:9999px;background:var(--sharing-accent);color:#fff;font-weight:700;font-size:.85rem;margin-top:.1rem">4</span>
+      <div><span style="font-weight:700;color:var(--sharing-accent)">LLM</span> dùng kết quả → <strong>trả lời</strong> người dùng — hoặc gọi tool tiếp <span style="color:var(--sharing-accent);font-weight:700">↺</span></div>
+    </div>
+  </div>
+  <div><img :src="'/images/function-calling.jpg'" alt="Sơ đồ LLM gọi tool: IN → LLM → OUT; LLM ↔ retrieval / tools / memory (call/response)" style="width:100%;border-radius:.6rem;border:1px solid var(--sharing-border)" /></div>
 </div>
 
-<div class="mt-4 text-sm" style="color:var(--sharing-fg-soft)">LLM không gọi trực tiếp — nó chỉ phát ra một lời gọi có cấu trúc, app mới thực thi:</div>
-
-```json
-{ "name": "get_weather", "arguments": { "city": "Hà Nội" } }
-```
-
-<Spotlight label="Đời đầu → vì sao cần MCP" class="mt-3">
-<strong>function calling</strong> (OpenAI, 2023) · <strong>tool use / tool calling</strong> (Anthropic, Google…) cho LLM gọi tool. Nhưng <strong>mỗi hãng một format riêng</strong>, mỗi tích hợp viết tay → dẫn thẳng tới bài toán <strong>M×N</strong> (slide kế).
-</Spotlight>
+<div class="mt-4 text-sm" style="color:var(--sharing-muted)">Cơ chế này gọi là <strong>function calling</strong> (OpenAI, 2023) · <strong>tool use</strong> (Anthropic, Google…) — nhưng mỗi hãng một format riêng → tích hợp rời rạc → bài toán <strong>M×N</strong> (slide kế).</div>
 
 <!--
-function calling/tool use = cơ chế LLM gọi tool: emit JSON {name, arguments}, app chạy rồi trả
-kết quả. Mỗi provider/SDK một format → tích hợp rời rạc → M×N → MCP chuẩn hoá. OpenAI fc 6/2023.
+Nhấn vòng lặp: LLM CHỈ phát lời gọi (JSON {name, arguments}); APP mới thực thi rồi trả kết quả;
+LLM dùng kết quả để trả lời hoặc gọi tiếp. Mỗi provider một format → M×N → MCP chuẩn hoá.
 -->
 
 ---

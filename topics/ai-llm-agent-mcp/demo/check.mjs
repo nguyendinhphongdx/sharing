@@ -17,8 +17,21 @@ console.log("[OK] Da ket noi MCP. session:", transport.sessionId);
 const { tools } = await client.listTools();
 console.log("[OK] tools/list:", tools.map((t) => t.name).join(", "));
 
-const add = await client.callTool({ name: "add_todo", arguments: { title: "Self-check " + new Date().toLocaleTimeString() } });
-console.log("[OK] add_todo ->", add.content[0].text);
+const add = await client.callTool({ name: "add_todo", arguments: { title: "Self-check MCP " + new Date().toLocaleTimeString() } });
+console.log("[OK] add_todo (MCP) ->", add.content[0].text.split("\n")[0]);
 
 await client.close();
-console.log("[PASS] MCP server san sang cho agent ket noi.");
+
+// --- Kiem tra them: REST tool-call API (KHONG qua MCP) ---
+const base = `http://localhost:${PORT}`;
+const list = await fetch(`${base}/tools`).then((r) => r.json());
+console.log("[OK] GET /tools ->", list.tools.map((t) => t.name).join(", "));
+
+const restAdd = await fetch(`${base}/tools/add_todo`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ title: "Self-check REST " + new Date().toLocaleTimeString() }),
+}).then((r) => r.json());
+console.log("[OK] POST /tools/add_todo (REST) ->", restAdd.message);
+
+console.log("[PASS] San sang ca 2 dang: MCP (/mcp) lan REST tool-call (/tools).");

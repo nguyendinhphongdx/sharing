@@ -1,12 +1,15 @@
 // Demo cho topic ai-llm-agent-mcp.
 //
-// Mot tien trinh phuc vu 3 thu, dung CHUNG mot in-memory store:
-//   1) Web UI live      ->  GET  /                (public/index.html, tu poll)
-//   2) REST API cho UI  ->  /api/todos ...
-//   3) MCP server       ->  /mcp   (Streamable HTTP, cho n8n moi & cac client moi)
-//                           /sse + /messages (SSE legacy, cho client/n8n cu)
+// Mot tien trinh, MOT bo dinh nghia tool (toolRegistry) dung CHUNG mot in-memory store,
+// phuc vu 4 dang truy cap:
+//   1) Web UI live        ->  GET  /                       (public/index.html, tu poll)
+//   2) REST API cho UI    ->  /api/todos ...               (kieu RESTful resource)
+//   3) Tool-call REST API ->  GET /tools + POST /tools/:name   (goi tool "binh thuong" qua HTTP)
+//   4) MCP server         ->  /mcp (Streamable HTTP) + /sse + /messages (SSE legacy)
 //
-// Agent (vd n8n) ket noi vao /mcp, goi tool -> store doi -> web UI thay ngay.
+// Diem hay de minh hoa: CUNG 1 dinh nghia tool phuc vu ca MCP lan REST tool-call.
+//   - REST: ban phai biet truoc tung URL + thu cong noi day (M x N).
+//   - MCP : client tu "kham pha" (tools/list) roi goi (tools/call) qua 1 chuan chung.
 
 import { randomUUID } from "node:crypto";
 import { fileURLToPath } from "node:url";
@@ -32,76 +35,96 @@ function log(...args) {
 }
 
 // ---------------------------------------------------------------------------
-// MCP server: dinh nghia 4 tool CRUD, deu goi vao store dung chung.
-// Tao MOI mot McpServer cho moi phien ket noi (theo mau chuan cua SDK).
+// TOOL REGISTRY — nguon su that duy nhat, dung cho CA MCP lan REST tool-call.
+// Moi tool: { name, title, description, inputSchema (zod shape), run(args) }.
+// run() tra ve { message, data?, ok? }  (ok mac dinh true; ok:false = loi logic).
+// ---------------------------------------------------------------------------
+const toolRegistry = [
+  {
+    name: "list_todos",
+    title: "List Todos",
+    description: "Liet ke tat ca cong viec (todo) hien co, kem id, tieu de va trang thai hoan thanh.",
+    inputSchema: {},
+    run: () => {
+      const todos = listTodos();
+      return { message: `Co ${todos.length} todo`, data: todos };
+    },
+  },
+  {
+    name: "add_todo",
+    title: "Add Todo",
+    description: "Them mot cong viec moi vao danh sach. Tra ve todo vua tao (co id).",
+    inputSchema: { title: z.string().min(1).describe("Tieu de / noi dung cong viec") },
+    run: ({ title }) => {
+      const todo = addTodo(title);
+      return { message: `Da them todo #${todo.id}: "${todo.title}"`, data: todo };
+    },
+  },
+  {
+    name: "complete_todo",
+    title: "Complete Todo",
+    description: "Danh dau mot cong viec la da hoan thanh theo id.",
+    inputSchema: { id: z.coerce.number().int().describe("id cua todo can hoan thanh") },
+    run: ({ id }) => {
+      const todo = completeTodo(id, true);
+      if (!todo) return { ok: false, message: `Khong tim thay todo #${id}` };
+      return { message: `Da hoan thanh todo #${todo.id}: "${todo.title}"`, data: todo };
+    },
+  },
+  {
+    name: "delete_todo",
+    title: "Delete Todo",
+    description: "Xoa mot cong viec khoi danh sach theo id.",
+    inputSchema: { id: z.coerce.number().int().describe("id cua todo can xoa") },
+    run: ({ id }) => {
+      const todo = deleteTodo(id);
+      if (!todo) return { ok: false, message: `Khong tim thay todo #${id}` };
+      return { message: `Da xoa todo #${todo.id}: "${todo.title}"`, data: todo };
+    },
+  },
+];
+
+const toolByName = Object.fromEntries(toolRegistry.map((t) => [t.name, t]));
+
+// Chay tool an toan (bat loi) -> { ok, message, data }. via = "mcp" | "rest" (chi de log).
+async function runTool(tool, args, via) {
+  try {
+    const r = await tool.run(args || {});
+    const ok = r?.ok !== false;
+    log(`tool(${via}): ${tool.name} -> ${ok ? "OK" : "FAIL"} ${r?.message ?? ""}`);
+    return { ok, message: r?.message ?? "OK", data: r?.data };
+  } catch (e) {
+    log(`tool(${via}): ${tool.name} -> ERROR ${e?.message || e}`);
+    return { ok: false, message: String(e?.message || e) };
+  }
+}
+
+// Mo ta tham so (cho GET /tools) suy ra tu zod shape — khong phai khai bao lai.
+function describeParams(inputSchema) {
+  return Object.entries(inputSchema || {}).map(([name, zt]) => ({
+    name,
+    type: (zt?._def?.typeName || "Zod").replace(/^Zod/, "").toLowerCase() || "any",
+    required: typeof zt?.isOptional === "function" ? !zt.isOptional() : true,
+    description: zt?.description || "",
+  }));
+}
+
+// ---------------------------------------------------------------------------
+// MCP server: dung CHUNG toolRegistry. Tao MOI cho moi phien (mau chuan SDK).
 // ---------------------------------------------------------------------------
 function buildMcpServer() {
   const server = new McpServer({ name: "todo-mcp", version: "1.0.0" });
-
-  server.registerTool(
-    "list_todos",
-    {
-      title: "List Todos",
-      description: "Liet ke tat ca cong viec (todo) hien co, kem id, tieu de va trang thai hoan thanh.",
-      inputSchema: {},
-    },
-    async () => {
-      const todos = listTodos();
-      log(`MCP tool: list_todos -> ${todos.length} todo`);
-      return { content: [{ type: "text", text: JSON.stringify(todos, null, 2) }] };
-    },
-  );
-
-  server.registerTool(
-    "add_todo",
-    {
-      title: "Add Todo",
-      description: "Them mot cong viec moi vao danh sach. Tra ve todo vua tao (co id).",
-      inputSchema: { title: z.string().describe("Tieu de / noi dung cong viec") },
-    },
-    async ({ title }) => {
-      const todo = addTodo(title);
-      log(`MCP tool: add_todo -> #${todo.id} "${todo.title}"`);
-      return { content: [{ type: "text", text: `Da them todo #${todo.id}: "${todo.title}"` }] };
-    },
-  );
-
-  server.registerTool(
-    "complete_todo",
-    {
-      title: "Complete Todo",
-      description: "Danh dau mot cong viec la da hoan thanh theo id.",
-      inputSchema: { id: z.coerce.number().int().describe("id cua todo can hoan thanh") },
-    },
-    async ({ id }) => {
-      const todo = completeTodo(id, true);
-      if (!todo) {
-        log(`MCP tool: complete_todo -> khong tim thay #${id}`);
-        return { content: [{ type: "text", text: `Khong tim thay todo #${id}` }], isError: true };
-      }
-      log(`MCP tool: complete_todo -> #${todo.id} done`);
-      return { content: [{ type: "text", text: `Da hoan thanh todo #${todo.id}: "${todo.title}"` }] };
-    },
-  );
-
-  server.registerTool(
-    "delete_todo",
-    {
-      title: "Delete Todo",
-      description: "Xoa mot cong viec khoi danh sach theo id.",
-      inputSchema: { id: z.coerce.number().int().describe("id cua todo can xoa") },
-    },
-    async ({ id }) => {
-      const todo = deleteTodo(id);
-      if (!todo) {
-        log(`MCP tool: delete_todo -> khong tim thay #${id}`);
-        return { content: [{ type: "text", text: `Khong tim thay todo #${id}` }], isError: true };
-      }
-      log(`MCP tool: delete_todo -> #${todo.id} xoa`);
-      return { content: [{ type: "text", text: `Da xoa todo #${todo.id}: "${todo.title}"` }] };
-    },
-  );
-
+  for (const tool of toolRegistry) {
+    server.registerTool(
+      tool.name,
+      { title: tool.title, description: tool.description, inputSchema: tool.inputSchema },
+      async (args) => {
+        const r = await runTool(tool, args, "mcp");
+        const text = r.data !== undefined ? `${r.message}\n${JSON.stringify(r.data, null, 2)}` : r.message;
+        return { content: [{ type: "text", text }], isError: !r.ok };
+      },
+    );
+  }
   return server;
 }
 
@@ -122,8 +145,10 @@ function requireToken(req, res, next) {
 }
 
 // --- REST API (cho web UI) ---
-// Thong tin ket noi cho nut Settings tren UI (token + cac path MCP).
-app.get("/api/info", (_req, res) => res.json({ token: MCP_TOKEN, mcpPath: "/mcp", ssePath: "/sse" }));
+// Thong tin ket noi cho nut Settings tren UI (token + cac path).
+app.get("/api/info", (_req, res) =>
+  res.json({ token: MCP_TOKEN, mcpPath: "/mcp", ssePath: "/sse", toolsPath: "/tools" }),
+);
 
 app.get("/api/todos", (_req, res) => res.json(listTodos()));
 
@@ -146,6 +171,43 @@ app.delete("/api/todos/:id", (req, res) => {
   const todo = deleteTodo(req.params.id);
   if (!todo) return res.status(404).json({ error: "not found" });
   res.json(todo);
+});
+
+// ---------------------------------------------------------------------------
+// Tool-call REST API (dang "tools call binh thuong", KHONG qua MCP) — /tools
+//   GET  /tools         -> liet ke tool (giong tools/list, nhung client phai biet URL nay)
+//   POST /tools/:name   -> goi 1 tool; body JSON = arguments (hoac { "arguments": {...} })
+// De mo (khong token) cho de demo & de n8n HTTP Request node goi thang.
+// ---------------------------------------------------------------------------
+app.get("/tools", (_req, res) => {
+  res.json({
+    tools: toolRegistry.map((t) => ({
+      name: t.name,
+      title: t.title,
+      description: t.description,
+      params: describeParams(t.inputSchema),
+      endpoint: `POST /tools/${t.name}`,
+    })),
+  });
+});
+
+app.post("/tools/:name", async (req, res) => {
+  const tool = toolByName[req.params.name];
+  if (!tool) {
+    return res.status(404).json({ ok: false, message: `Khong co tool ten "${req.params.name}"` });
+  }
+  // Chap nhan body = arguments truc tiep, HOAC { arguments: {...} } (kieu tools/call cua MCP).
+  const rawArgs =
+    req.body && typeof req.body.arguments === "object" && req.body.arguments !== null
+      ? req.body.arguments
+      : req.body;
+  const parsed = z.object(tool.inputSchema).safeParse(rawArgs || {});
+  if (!parsed.success) {
+    const msg = parsed.error.issues.map((i) => `${i.path.join(".") || "(root)"}: ${i.message}`).join("; ");
+    return res.status(400).json({ ok: false, message: `Tham so khong hop le: ${msg}` });
+  }
+  const r = await runTool(tool, parsed.data, "rest");
+  res.json(r);
 });
 
 // ---------------------------------------------------------------------------
@@ -214,9 +276,11 @@ app.post("/messages", requireToken, async (req, res) => {
 // ---------------------------------------------------------------------------
 app.listen(PORT, () => {
   log(`Todo MCP demo dang chay tai http://localhost:${PORT}`);
-  log(`  Web UI       : http://localhost:${PORT}/`);
-  log(`  MCP (HTTP)   : http://localhost:${PORT}/mcp`);
-  log(`  MCP (SSE)    : http://localhost:${PORT}/sse`);
-  log(`  Bearer token : ${MCP_TOKEN}  (Authorization: Bearer ${MCP_TOKEN})`);
+  log(`  Web UI            : http://localhost:${PORT}/`);
+  log(`  REST (UI)         : http://localhost:${PORT}/api/todos`);
+  log(`  Tool-call REST    : GET ${`http://localhost:${PORT}/tools`}  +  POST /tools/:name`);
+  log(`  MCP (HTTP)        : http://localhost:${PORT}/mcp`);
+  log(`  MCP (SSE)         : http://localhost:${PORT}/sse`);
+  log(`  Bearer token (MCP): ${MCP_TOKEN}  (Authorization: Bearer ${MCP_TOKEN})`);
   log(`  Bam nut ⚙ tren web UI de xem & copy thong tin ket noi cho n8n.`);
 });
