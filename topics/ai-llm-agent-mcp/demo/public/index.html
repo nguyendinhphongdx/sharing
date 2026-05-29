@@ -98,6 +98,7 @@
     .modal {
       background: #fff; border-radius: 16px; padding: 22px; width: 100%; max-width: 560px;
       box-shadow: 0 20px 50px rgba(15, 23, 42, .25);
+      max-height: 88vh; overflow-y: auto;
     }
     .modal h2 { margin: 0 0 4px; font-size: 20px; }
     .modal .hint { margin: 0 0 16px; font-size: 13px; color: var(--muted); }
@@ -111,6 +112,16 @@
     .copy-btn { background: var(--accent); color: #fff; font-size: 12px; padding: 6px 10px; border-radius: 8px; flex: none; }
     .copy-btn.copied { background: var(--fg-soft); }
     .modal .close { background: var(--bg-soft); color: var(--fg-soft); width: 100%; margin-top: 8px; }
+    .modal .section-title { font-size: 14px; font-weight: 700; color: var(--fg); margin: 16px 0 10px; padding-top: 14px; border-top: 1px solid var(--border); }
+    .modal .section-title.first { margin-top: 0; padding-top: 0; border-top: none; }
+    .tool-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    .tool-item { background: var(--bg-soft); border: 1.5px solid var(--border); border-radius: 10px; padding: 8px 10px; }
+    .tool-item .ti-head { display: flex; align-items: center; gap: 8px; }
+    .tool-item .m { font-weight: 700; color: var(--accent); font-size: 12px; font-family: ui-monospace, monospace; }
+    .tool-item code { font-family: ui-monospace, "Cascadia Code", monospace; font-size: 13px; color: var(--fg); }
+    .tool-item .ti-head .copy-btn { margin-left: auto; }
+    .tool-item .ti-body { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .tool-item .ti-body code { font-size: 12px; color: var(--fg-soft); }
   </style>
 </head>
 <body>
@@ -133,8 +144,8 @@
 
   <div class="overlay" id="overlay">
     <div class="modal">
-      <h2>Thông tin kết nối MCP</h2>
-      <p class="hint">Dán vào node <b>MCP Client Tool</b> trong n8n. Khi mở trang này qua tunnel, URL bên dưới tự đổi theo domain tunnel.</p>
+      <h2>Thông tin kết nối &amp; API</h2>
+      <p class="hint">Dùng cho n8n (<b>MCP Client Tool</b> hoặc <b>HTTP Request</b>) &amp; curl. Mở trang qua tunnel thì các URL bên dưới tự đổi theo domain tunnel.</p>
       <div id="info-rows"></div>
       <button class="close" id="close">Đóng</button>
     </div>
@@ -230,6 +241,14 @@
         </div>`;
     }
 
+    // 4 tool cua REST tool-call API (khop server.mjs) — name + body vi du.
+    const TOOLS = [
+      { name: "list_todos", body: "{}" },
+      { name: "add_todo", body: '{"title":"Mua cà phê"}' },
+      { name: "complete_todo", body: '{"id":1}' },
+      { name: "delete_todo", body: '{"id":1}' },
+    ];
+
     async function openInfo() {
       const origin = window.location.origin;
       let token = "demo-secret-123";
@@ -237,11 +256,25 @@
         const info = await api("/api/info");
         if (info?.token != null) token = info.token;
       } catch {}
+
+      const toolItems = TOOLS.map((t) => `
+        <div class="tool-item">
+          <div class="ti-head"><span class="m">POST</span><code>/tools/${t.name}</code>
+            <button class="copy-btn" data-copy="${escapeHtml(origin + "/tools/" + t.name)}">Copy URL</button></div>
+          <div class="ti-body">body: <code>${escapeHtml(t.body)}</code></div>
+        </div>`).join("");
+
       rowsEl.innerHTML =
-        infoRow("MCP endpoint — HTTP Streamable (khuyến nghị)", origin + "/mcp") +
-        infoRow("MCP endpoint — SSE (n8n cũ)", origin + "/sse") +
+        `<div class="section-title first">🔌 MCP — cho node <b>MCP Client Tool</b> (client tự khám phá tool)</div>` +
+        infoRow("Endpoint — HTTP Streamable (khuyến nghị)", origin + "/mcp") +
+        infoRow("Endpoint — SSE (n8n cũ)", origin + "/sse") +
         infoRow("Bearer token", token) +
-        infoRow("Web UI", origin + "/");
+        `<div class="section-title">🛠️ REST tool-call — cho <b>HTTP Request node</b> / curl (không cần token)</div>` +
+        infoRow("Liệt kê tool — GET", origin + "/tools") +
+        `<div class="tool-list">${toolItems}</div>` +
+        infoRow("Ví dụ curl", `curl -X POST ${origin}/tools/add_todo -H "Content-Type: application/json" -d '{"title":"Mua cà phê"}'`) +
+        `<div class="section-title">🌐 Web UI</div>` +
+        infoRow("Trang này", origin + "/");
       overlay.classList.add("open");
     }
 
