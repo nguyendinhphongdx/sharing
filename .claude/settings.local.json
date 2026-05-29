@@ -5,7 +5,9 @@
       "Bash(git --version)",
       "Bash(sed -n '1,30p' scripts/fetch-images.mjs)",
       "Bash(sed -n '1,40p' scripts/present.mjs)",
-      "Bash(node -e \"const c=require\\('./node_modules/@iconify-json/carbon/icons.json'\\); const names=Object.keys\\(c.icons\\); console.log\\('slack:', names.filter\\(n=>n.includes\\('slack'\\)\\)\\); console.log\\('github:', names.filter\\(n=>n.includes\\('github'\\)\\)\\); console.log\\('postgres:', names.filter\\(n=>n.includes\\('postgre'\\)||n.includes\\('sql'\\)\\)\\); console.log\\('bot/robot:', names.filter\\(n=>n.includes\\('bot'\\)||n.includes\\('robot'\\)\\)\\); console.log\\('ai/machine:', names.filter\\(n=>n.includes\\('machine-learning'\\)||n==='ai-status'||n.includes\\('chip'\\)\\)\\);\")"
+      "Bash(node -e \"const c=require\\('./node_modules/@iconify-json/carbon/icons.json'\\); const names=Object.keys\\(c.icons\\); console.log\\('slack:', names.filter\\(n=>n.includes\\('slack'\\)\\)\\); console.log\\('github:', names.filter\\(n=>n.includes\\('github'\\)\\)\\); console.log\\('postgres:', names.filter\\(n=>n.includes\\('postgre'\\)||n.includes\\('sql'\\)\\)\\); console.log\\('bot/robot:', names.filter\\(n=>n.includes\\('bot'\\)||n.includes\\('robot'\\)\\)\\); console.log\\('ai/machine:', names.filter\\(n=>n.includes\\('machine-learning'\\)||n==='ai-status'||n.includes\\('chip'\\)\\)\\);\")",
+      "Bash(npm run *)",
+      "Bash(npx slidev *)"
     ]
   }
 }
